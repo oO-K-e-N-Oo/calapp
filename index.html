@@ -736,7 +736,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v129</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v130</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -1408,8 +1408,11 @@ function startPenStroke(color, size, startPt) {
 function endPenStroke() {
   if (!Draw.activeStroke || !Draw.activePenObjRef) return;
   if (Draw.activeStroke.points.length >= 2) {
+    // ストローク追加前のスナップショットを保存
+    const before = clone(Draw.activePenObjRef);
     Draw.activePenObjRef.paths.push(Draw.activeStroke);
-    pushUndo({type:'stroke', objId:Draw.activePenObjRef.id, obj:clone(Draw.activePenObjRef)});
+    const after  = clone(Draw.activePenObjRef);
+    pushUndo({type:'stroke', objId:after.id, before, after});
     flushCell();
   }
   Draw.activeStroke = null;
@@ -1423,13 +1426,14 @@ function applyUndo(a){
   if(a.type==='move'){const o=Draw.objects.find(x=>x.id===a.objId);if(o)Object.assign(o,clone(a.from));}
   if(a.type==='edit'){const o=Draw.objects.find(x=>x.id===a.objId);if(o)Object.assign(o,clone(a.from));}
   if(a.type==='stroke'){
-    // ストローク追加を取り消し: オブジェクトを直前スナップショットに戻す
     const idx=Draw.objects.findIndex(x=>x.id===a.objId);
-    if(idx>=0){
-      // スタック上のひとつ前の stroke/create を探して前状態を復元
-      const prevSnap=getPrevObjSnap(a.objId, Draw.undoStk);
-      if(prevSnap) Draw.objects[idx]=clone(prevSnap);
-      else Draw.objects.splice(idx,1); // 最初のストロークを取り消し→オブジェクト削除
+    if(a.before && a.before.paths.length > 0){
+      // 前状態に戻す
+      if(idx>=0) Draw.objects[idx]=clone(a.before);
+      else Draw.objects.push(clone(a.before));
+    } else {
+      // 最初のストロークのUndo→オブジェクトごと削除
+      if(idx>=0) Draw.objects.splice(idx,1);
     }
   }
 }
@@ -1439,21 +1443,10 @@ function applyRedo(a){
   if(a.type==='move'){const o=Draw.objects.find(x=>x.id===a.objId);if(o)Object.assign(o,clone(a.to));}
   if(a.type==='edit'){const o=Draw.objects.find(x=>x.id===a.objId);if(o)Object.assign(o,clone(a.to));}
   if(a.type==='stroke'){
-    // ストロークをやり直し: a.obj の状態（追加後）に戻す
     const idx=Draw.objects.findIndex(x=>x.id===a.objId);
-    if(idx>=0) Draw.objects[idx]=clone(a.obj);
-    else Draw.objects.push(clone(a.obj));
+    if(idx>=0) Draw.objects[idx]=clone(a.after);
+    else Draw.objects.push(clone(a.after));
   }
-}
-
-// スタックから指定 objId の直前スナップショットを取得
-function getPrevObjSnap(objId, stack) {
-  for(let i=stack.length-1;i>=0;i--){
-    const a=stack[i];
-    if((a.type==='stroke'||a.type==='create')&&a.objId===objId&&a.obj)
-      return a.obj;
-  }
-  return null;
 }
 
 // スタンプ専用キャンバスリスナー（onDownとは独立）
