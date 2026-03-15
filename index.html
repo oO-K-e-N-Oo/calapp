@@ -310,7 +310,7 @@ button:focus-visible { outline: none; background: transparent; }
   justify-content: center;
 }
 @keyframes cal-fadein { from { opacity: 0; } to { opacity: 1; } }
-.cal-grid-area.tab-switching { animation: cal-fadein 0.6s ease forwards; }
+.cal-grid-area.tab-switching { animation: cal-fadein 0.4s ease forwards; }
 
 /* ════════════════════════════════════════════
    DAY CELL SCREEN — 共通
@@ -340,6 +340,7 @@ button:focus-visible { outline: none; background: transparent; }
 .icon-btn:focus,
 .icon-btn:active,
 .icon-btn:focus-visible                { outline: none; background: transparent; }
+.icon-btn:focus:not(:focus-visible)    { background: transparent; }
 .icon-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ════════════════════════════════════════════
@@ -748,7 +749,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v165</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v168</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -3306,11 +3307,26 @@ document.getElementById('cal-tabs').addEventListener('click', e => {
 })();
 
 /* ════ CALENDAR NAV ════ */
-document.getElementById('btn-prev').addEventListener('click',()=>{
+function triggerCalFadeIn() {
+  const area = document.getElementById('cal-grid-area');
+  area.classList.remove('tab-switching');
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    area.classList.add('tab-switching');
+    area.addEventListener('animationend', () => {
+      area.classList.remove('tab-switching');
+    }, { once: true });
+  }));
+}
+
+document.getElementById('btn-prev').addEventListener('click', e => {
   if(--S.month<0){S.month=11;S.year--;} renderCalendar();
+  triggerCalFadeIn();
+  e.currentTarget.blur();
 });
-document.getElementById('btn-next').addEventListener('click',()=>{
+document.getElementById('btn-next').addEventListener('click', e => {
   if(++S.month>11){S.month=0;S.year++;} renderCalendar();
+  triggerCalFadeIn();
+  e.currentTarget.blur();
 });
 
 /* ════ SCREEN / ORIENTATION ════ */
