@@ -698,29 +698,9 @@ button:focus-visible { outline: none; background: transparent; }
    TRANSITION LAYER（画面遷移アニメーション用）
 ════════════════════════════════════════════ */
 /* #transition-canvas は inline style で制御 */
-
-#debug-overlay{
-  position:fixed;bottom:0;left:0;right:0;
-  background:rgba(0,0,0,.85);color:#0f0;
-  font:11px monospace;padding:8px;
-  max-height:160px;overflow-y:auto;
-  z-index:9999;pointer-events:none;
-}
 </style>
 </head>
 <body>
-<div id="debug-overlay"></div>
-<script>
-const _log = (...a) => {
-  const el = document.getElementById('debug-overlay');
-  if (!el) return;
-  const line = document.createElement('div');
-  line.textContent = new Date().toLocaleTimeString() + ' ' + a.map(x => typeof x === 'object' ? JSON.stringify(x) : x).join(' ');
-  el.appendChild(line);
-  el.scrollTop = el.scrollHeight;
-};
-</script>
-
 
 <!-- ══ CALENDAR SCREEN ══ -->
 <div id="cal-screen" class="screen active">
@@ -1827,7 +1807,7 @@ function deleteObj(id){
 
 function flushCell(){
   if (!S.currentKey) return;
-  _log && _log("[flush] key:", S.currentKey, "objs:", Draw.objects.length);
+  // アクティブなカレンダーのcellDataに直接書き込む（参照のズレを防ぐ）
   getActiveCalendar().cellData[S.currentKey] = clone(Draw.objects);
   renderMiniCanvases();
 }
@@ -1947,9 +1927,9 @@ function goBack(){
   finalizePenObjs(); finalizeText();
   Draw.undoStk=[]; Draw.redoStk=[];
   S.clipboard=null;
-  _log('[goBack] key:', S.currentKey, 'objs:', Draw.objects.length);
+  console.log('[goBack] currentKey:', S.currentKey, 'objects:', Draw.objects.length, Draw.objects);
   flushCell();
-  _log('[flush] saved objs:', getActiveCalendar().cellData[S.currentKey]?.length ?? 'undefined');
+  console.log('[goBack] after flush:', JSON.stringify(getActiveCalendar().cellData[S.currentKey]?.length));
 
   // ── アニメーション開始位置（描画キャンバス） ──
   const fromRect = cvs.getBoundingClientRect();
@@ -2872,6 +2852,8 @@ function renderMiniCanvases(){
     const key=mc.dataset.key;
     const par=mc.parentElement;
     const w=par.clientWidth, h=par.clientHeight;
+    const objs=getCellObjs(key);
+    if(objs.length>0) _log&&_log('[mini]',key,'w:',w,'h:',h,'objs:',objs.length);
     if(!w||!h) return;
     mc.width=w; mc.height=h;
     const c2=mc.getContext('2d');
