@@ -737,7 +737,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v141-debug</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v140</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -936,19 +936,6 @@ button:focus-visible { outline: none; background: transparent; }
 "></canvas>
 
 <script>
-function _showLog(msg) {
-  let el = document.getElementById('_dbg2');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = '_dbg2';
-    el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.85);color:#ff0;font:11px monospace;padding:6px;max-height:150px;overflow:auto;z-index:9999;pointer-events:none;';
-    document.body.appendChild(el);
-  }
-  const d = document.createElement('div');
-  d.textContent = msg;
-  el.appendChild(d);
-  el.scrollTop = el.scrollHeight;
-}
 
 /* ══════════════════════════════════════════════
    STICKER DEFS
@@ -2424,9 +2411,8 @@ function applyCellSizes(numRows, isLand) {
   const grid = document.getElementById('cal-grid');
   const areaW = area.clientWidth;
   const areaH = area.clientHeight;
-  _showLog('applyCellSizes isLand='+isLand+' areaW='+areaW+' areaH='+areaH);
 
-  if (!areaW || !areaH) { _showLog('EARLY RETURN'); setTimeout(renderMiniCanvases, 50); return; }
+  if (!areaW || !areaH) { setTimeout(renderMiniCanvases, 50); return; }
 
   if (!isLand) {
     /* ── 縦長モード ──
@@ -2812,20 +2798,21 @@ function moveObjInCell(key, obj, nx, ny) {
 
 function renderMiniCanvases(){
   let needsRetry = false;
-  let drawn=0, skipped=0;
   document.querySelectorAll('.cell-preview canvas').forEach(mc=>{
     const key=mc.dataset.key;
     const par=mc.parentElement;
+    // clientWidthが0の場合はstyle.widthから取得（横長モード対応）
     let w=par.clientWidth, h=par.clientHeight;
     if(!w && par.style.width)  w  = parseInt(par.style.width);
     if(!h && par.style.height) h  = parseInt(par.style.height);
-    if(!w||!h){ needsRetry = true; skipped++; return; }
-    drawn++;
+    if(!w||!h){ needsRetry = true; return; }
     mc.width=w; mc.height=h;
     const c2=mc.getContext('2d');
     const sc=Math.min(w/CANVAS_SRC,h/CANVAS_SRC);
     c2.save(); c2.scale(sc,sc);
-    getCellObjs(key).forEach(o=>drawObjMini(c2,o));
+    const objs = getCellObjs(key);
+    if(objs.length>0) _showLog('draw key='+key+' objs='+objs.length+' calId='+activeCalendarId);
+    objs.forEach(o=>drawObjMini(c2,o));
     c2.restore();
     // 選択中オブジェクトのバウンディングボックスを描画
     if (Cal.selCellKey===key && Cal.selObjId) {
@@ -2833,7 +2820,6 @@ function renderMiniCanvases(){
       if (obj) drawMiniBBox(c2,obj,sc);
     }
   });
-  _showLog("renderMini drawn="+drawn+" skipped="+skipped+" retry="+needsRetry);
   if (needsRetry) setTimeout(renderMiniCanvases, 80);
 }
 
