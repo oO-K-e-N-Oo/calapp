@@ -35,7 +35,7 @@
   /* toolbar fixed height — portrait */
   --toolbar-h:   152px;
   /* landscape side bar width */
-  --sidebar-w:   260px;
+  --sidebar-w:   310px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{
@@ -285,14 +285,20 @@ body{font-family:var(--font-body);color:var(--ink);}
 
 /* row 1: back + date + undo */
 .tb-row1{
-  display:flex;align-items:center;gap:12px;
+  display:flex;align-items:center;gap:4px;
   padding:10px 16px 8px;flex-shrink:0;
 }
-.day-badge-inline{display:flex;align-items:baseline;gap:6px;}
-.day-num{font-family:var(--font-disp);font-size:34px;color:var(--ink-faint);line-height:1;}
-.day-sub{font-size:13px;color:var(--ink-faint);font-weight:300;}
+.day-badge-inline{
+  display:flex; flex-direction:column; gap:1px;
+}
+.day-date-row{
+  display:flex; align-items:baseline; gap:8px;
+}
+.day-num{font-size:26px;font-weight:600;color:var(--ink-faint);line-height:1;}
+.day-dow{font-size:14px;color:var(--ink-faint);font-weight:400;}
+.day-sub{font-size:11px;color:var(--ink-faint);font-weight:300;}
 .spacer{flex:1;}
-.ur-row{display:flex;gap:6px;}
+.ur-row{display:flex;gap:6px;padding-right:8px;}
 .ur-btn{
   background:none;border:1px solid var(--border);border-radius:var(--r);
   cursor:pointer;padding:6px 14px;font-size:16px;
@@ -353,6 +359,7 @@ body{font-family:var(--font-body);color:var(--ink);}
   display:flex;flex-direction:column;gap:12px;padding:14px 12px;
   overflow-y:auto;
 }
+
 /* show/hide based on orientation */
 #day-screen.portrait  .day-topbar{display:flex;}
 #day-screen.portrait  .day-sidebar-land{display:none;}
@@ -360,10 +367,32 @@ body{font-family:var(--font-body);color:var(--ink);}
 #day-screen.landscape .day-sidebar-land{display:flex;}
 
 /* landscape tool layout */
-.land-row1{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;}
-.land-badge{display:flex;flex-direction:column;}
-.land-day-num{font-family:var(--font-disp);font-size:38px;color:var(--ink-faint);line-height:1;}
-.land-day-sub{font-size:10px;color:var(--ink-faint);font-weight:300;margin-top:2px;}
+.land-row1{display:flex;align-items:center;gap:2px;flex-wrap:nowrap;margin-left:-12px;}
+.land-badge{display:flex;flex-direction:column;gap:2px;}
+.land-date-row{display:flex;align-items:baseline;gap:6px;white-space:nowrap;}
+.land-day-num{font-family:var(--font-disp);font-size:38px;color:var(--ink-faint);line-height:1;white-space:nowrap;}
+.land-day-dow{font-size:16px;color:var(--ink-faint);font-weight:400;white-space:nowrap;}
+.land-day-sub{font-size:10px;color:var(--ink-faint);font-weight:300;white-space:nowrap;}
+
+/* 横長レイアウトの戻るボタン */
+/* 縦長の戻るボタン */
+#btn-back{
+  width:60px; height:60px;
+  margin-left:-10px;
+}
+#btn-back svg{
+  width:40px; height:40px;
+  stroke-width:2.4;
+}
+
+/* 横長の戻るボタン */
+#btn-back-land{
+  width:80px; height:80px;
+}
+#btn-back-land svg{
+  width:56px; height:56px;
+  stroke-width:2.4;
+}
 
 .land-tool-group{
   display:flex;flex-direction:column;
@@ -537,7 +566,10 @@ body{font-family:var(--font-body);color:var(--ink);}
         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
       <div class="day-badge-inline">
-        <div class="day-num" id="day-num-p">1日</div>
+        <div class="day-date-row">
+          <div class="day-num" id="day-num-p">1日</div>
+          <div class="day-dow" id="day-dow-p"></div>
+        </div>
         <div class="day-sub" id="day-sub-p">2026年 3月</div>
       </div>
       <div class="spacer"></div>
@@ -577,7 +609,10 @@ body{font-family:var(--font-body);color:var(--ink);}
         <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
       <div class="land-badge">
-        <div class="land-day-num" id="day-num-l">1日</div>
+        <div class="land-date-row">
+          <div class="land-day-num" id="day-num-l">1日</div>
+          <div class="land-day-dow" id="day-dow-l"></div>
+        </div>
         <div class="land-day-sub" id="day-sub-l">2026年 3月</div>
       </div>
       <div style="flex:1"></div>
@@ -1633,6 +1668,13 @@ function openDayCell(key, label) {
   document.getElementById('day-sub-p').textContent = `${S.year}年 ${S.month+1}月`;
   document.getElementById('day-sub-l').textContent = `${S.year}年 ${S.month+1}月`;
 
+  const DOW_JA = ['（日）','（月）','（火）','（水）','（木）','（金）','（土）'];
+  const dowStr = (typeof label === 'number')
+    ? DOW_JA[new Date(S.year, S.month, label).getDay()]
+    : '';
+  document.getElementById('day-dow-p').textContent = dowStr;
+  document.getElementById('day-dow-l').textContent = dowStr;
+
   // ── ミニキャンバスの rect を取得（アニメーション開始位置）──
   const miniMc = document.querySelector(`.cell-preview canvas[data-key="${key}"]`);
   const fromRect = miniMc ? miniMc.getBoundingClientRect() : null;
@@ -1960,8 +2002,8 @@ function renderCalendar() {
   document.getElementById('hdr-year').textContent  = S.year + '年';
 
   const headers = S.weekStart === 0
-    ? ['SUN','MON','TUE','WED','THU','FRI','SAT']
-    : ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+    ? ['日','月','火','水','木','金','土']
+    : ['月','火','水','木','金','土','日'];
   const isLand = isLandscapeCalendar();
 
   renderWeekdayHeader(headers);
@@ -2034,8 +2076,8 @@ function renderCalendarDOM(descs, headers, isLand) {
     if (desc.isToday) el.classList.add('today');
     const hd = headers[idx % 7];
     if (desc.type !== 'memo') {
-      if      (hd === 'SUN') el.classList.add('is-sun');
-      else if (hd === 'SAT') el.classList.add('is-sat');
+      if      (hd === '日') el.classList.add('is-sun');
+      else if (hd === '土') el.classList.add('is-sat');
       else if (desc.holName) el.classList.add('is-hol');
     }
 
