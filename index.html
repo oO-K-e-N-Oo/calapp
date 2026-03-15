@@ -304,14 +304,20 @@ body{font-family:var(--font-body);color:var(--ink);}
 .day-dow{font-size:14px;color:var(--ink-faint);font-weight:400;}
 .day-sub{font-size:11px;color:var(--ink-faint);font-weight:300;}
 .spacer{flex:1;}
-.ur-row{display:flex;gap:6px;padding-right:8px;align-self:flex-end;padding-bottom:2px;margin-left:16px;}
+.ur-row{display:flex;gap:2px;padding-right:8px;align-self:flex-end;padding-bottom:2px;margin-left:16px;}
 .ur-btn{
-  background:none;border:1px solid var(--border);border-radius:var(--r);
-  cursor:pointer;padding:6px 14px;font-size:16px;
-  transition:background .12s;color:var(--ink);
+  background:none;border:none;
+  cursor:pointer;padding:6px 8px;
+  transition:background .12s, opacity .12s;
+  color:var(--ink);border-radius:var(--r);
+  display:flex;align-items:center;justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+  outline:none;
 }
 .ur-btn:hover{background:var(--tool-hover);}
+.ur-btn:focus, .ur-btn:active{outline:none;}
 .ur-btn:disabled{opacity:.28;cursor:default;}
+.ur-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 
 /* row 2: tool buttons */
 .tb-row2{
@@ -590,8 +596,8 @@ body{font-family:var(--font-body);color:var(--ink);}
       </div>
       <div class="spacer"></div>
       <div class="ur-row">
-        <button class="ur-btn" id="btn-undo" disabled>↩</button>
-        <button class="ur-btn" id="btn-redo" disabled>↪</button>
+        <button class="ur-btn" id="btn-undo" disabled><svg viewBox="0 0 24 24"><path d="M8 7H17a5 5 0 0 1 0 10H7"/><polyline points="11 4 8 7 11 10"/></svg></button>
+        <button class="ur-btn" id="btn-redo" disabled><svg viewBox="0 0 24 24"><path d="M16 7H7a5 5 0 0 0 0 10h10"/><polyline points="13 4 16 7 13 10"/></svg></button>
       </div>
     </div>
     <!-- Row 2: tool buttons -->
@@ -633,8 +639,8 @@ body{font-family:var(--font-body);color:var(--ink);}
       </div>
       <div style="flex:1"></div>
       <div class="ur-row">
-        <button class="ur-btn" id="btn-undo-l" disabled>↩</button>
-        <button class="ur-btn" id="btn-redo-l" disabled>↪</button>
+        <button class="ur-btn" id="btn-undo-l" disabled><svg viewBox="0 0 24 24"><path d="M8 7H17a5 5 0 0 1 0 10H7"/><polyline points="11 4 8 7 11 10"/></svg></button>
+        <button class="ur-btn" id="btn-redo-l" disabled><svg viewBox="0 0 24 24"><path d="M16 7H7a5 5 0 0 0 0 10h10"/><polyline points="13 4 16 7 13 10"/></svg></button>
       </div>
     </div>
 
