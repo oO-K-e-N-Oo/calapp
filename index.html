@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="手書きカレンダー">
 <title>手書きカレンダー</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg:          #f6f5f3;
@@ -31,14 +31,20 @@
   --shadow-md:   0 4px 16px rgba(0,0,0,.10);
   --r:           6px;
   --font-body:   'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
-  --font-disp:   'DM Serif Display', 'Hiragino Mincho ProN', serif;
+  --font-disp:   'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
   /* toolbar fixed height — portrait */
   --toolbar-h:   152px;
   /* landscape side bar width */
   --sidebar-w:   260px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;background:var(--bg);}
+html,body{
+  height:100%;overflow:hidden;background:var(--bg);
+  /* 長押しによるテキスト選択・コールアウトを無効化 */
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+}
 body{font-family:var(--font-body);color:var(--ink);}
 
 /* ── screens ── */
@@ -211,7 +217,7 @@ body{font-family:var(--font-body);color:var(--ink);}
   flex-shrink:0;
   height:var(--cell-date-h, 20px); /* JSで上書き */
 }
-.cell-num{font-size:11px;font-weight:500;color:var(--ink-mid);line-height:1;}
+.cell-num{font-size:11px;font-weight:500;color:var(--ink-mid);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cal-cell.today .cell-num{font-weight:700;color:var(--ink);}
 .cal-cell.is-sun .cell-num{color:var(--sun-txt);}
 .cal-cell.is-sat .cell-num{color:var(--sat-txt);}
@@ -1086,15 +1092,15 @@ function getObjBounds(obj) {
 const PAD = 8;
 function drawBBox(c, obj) {
   const b  = getObjBounds(obj);
-  const bx = b.x+b.w+PAD+6;
-  const by = b.y-PAD-6;
+  const bx = b.x+b.w+PAD+14;
+  const by = b.y-PAD-14;
   c.save();
   c.strokeStyle='#3a6fa8';c.lineWidth=1.5;c.setLineDash([5,3]);
   c.strokeRect(b.x-PAD, b.y-PAD, b.w+PAD*2, b.h+PAD*2);
   c.setLineDash([]);
   c.fillStyle='#e03030';
-  c.beginPath();c.arc(bx,by,8,0,Math.PI*2);c.fill();
-  c.fillStyle='#fff';c.font='bold 11px sans-serif';
+  c.beginPath();c.arc(bx,by,14,0,Math.PI*2);c.fill();
+  c.fillStyle='#fff';c.font='bold 16px sans-serif';
   c.textAlign='center';c.textBaseline='middle';
   c.fillText('×',bx,by);
   c.restore();
@@ -1102,8 +1108,8 @@ function drawBBox(c, obj) {
 
 function hitDeleteBtn(obj, px, py) {
   const b=getObjBounds(obj);
-  const bx=b.x+b.w+PAD+6, by=b.y-PAD-6;
-  return Math.hypot(px-bx,py-by)<10;
+  const bx=b.x+b.w+PAD+14, by=b.y-PAD-14;
+  return Math.hypot(px-bx,py-by)<18;
 }
 function hitObj(obj, px, py) {
   const b=getObjBounds(obj);
