@@ -6,540 +6,721 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="手書きカレンダー">
-<title>手書きカレンダー</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiB2aWV3Qm94PSIwIDAgMjgwIDI4MCI+CiAgPGRlZnM+CiAgICA8Y2xpcFBhdGggaWQ9ImNsaXAiPjxyZWN0IHg9IjIwIiB5PSIyMCIgd2lkdGg9IjI0MCIgaGVpZ2h0PSIyNDAiIHJ4PSI1MiIvPjwvY2xpcFBhdGg+CiAgPC9kZWZzPgogIDxyZWN0IHg9IjIwIiB5PSIyMCIgd2lkdGg9IjI0MCIgaGVpZ2h0PSIyNDAiIHJ4PSI1MiIgZmlsbD0iIzJjMmEyNiIvPgogIDxnIGNsaXAtcGF0aD0idXJsKCNjbGlwKSI+CiAgICA8cmVjdCB4PSI0MCIgeT0iNzIiIHdpZHRoPSIxNjgiIGhlaWdodD0iMTQ4IiByeD0iMTQiIGZpbGw9IiNmYWY5ZjciLz4KICAgIDxyZWN0IHg9IjcyIiAgeT0iNTgiIHdpZHRoPSIxNCIgaGVpZ2h0PSIyOCIgcng9IjciIGZpbGw9IiNlODc3M2EiLz4KICAgIDxyZWN0IHg9IjE1OCIgeT0iNTgiIHdpZHRoPSIxNCIgaGVpZ2h0PSIyOCIgcng9IjciIGZpbGw9IiNlODc3M2EiLz4KICAgIDxyZWN0IHg9IjQwIiB5PSI3MiIgd2lkdGg9IjE2OCIgaGVpZ2h0PSIzOCIgcng9IjAiIGZpbGw9IiNlODc3M2EiLz4KICAgIDxyZWN0IHg9IjQwIiB5PSI3MiIgd2lkdGg9IjE2OCIgaGVpZ2h0PSIxOCIgcng9IjE0IiBmaWxsPSIjZTg3NzNhIi8+CiAgICA8dGV4dCB4PSIxMjQiIHk9Ijk3IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iNzAwIgogICAgICAgICAgZm9udC1mYW1pbHk9IkhpcmFnaW5vIFNhbnMsIHNhbnMtc2VyaWYiIGZpbGw9IiNmZmYiIGxldHRlci1zcGFjaW5nPSIxIj5DYWxhcHA8L3RleHQ+CiAgICA8cmVjdCB4PSI1MiIgIHk9IjEyNCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjI0IiByeD0iNSIgZmlsbD0iI2VjZTllMyIvPgogICAgPHJlY3QgeD0iOTAiICB5PSIxMjQiIHdpZHRoPSIzMCIgaGVpZ2h0PSIyNCIgcng9IjUiIGZpbGw9IiNlODc3M2EiIG9wYWNpdHk9Ii4zIi8+CiAgICA8cmVjdCB4PSIxMjgiIHk9IjEyNCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjI0IiByeD0iNSIgZmlsbD0iI2VjZTllMyIvPgogICAgPHJlY3QgeD0iMTY2IiB5PSIxMjQiIHdpZHRoPSIzMCIgaGVpZ2h0PSIyNCIgcng9IjUiIGZpbGw9IiNlY2U5ZTMiLz4KICAgIDxyZWN0IHg9IjUyIiAgeT0iMTU2IiB3aWR0aD0iMzAiIGhlaWdodD0iMjQiIHJ4PSI1IiBmaWxsPSIjZWNlOWUzIi8+CiAgICA8cmVjdCB4PSI5MCIgIHk9IjE1NiIgd2lkdGg9IjMwIiBoZWlnaHQ9IjI0IiByeD0iNSIgZmlsbD0iI2VjZTllMyIvPgogICAgPHJlY3QgeD0iMTI4IiB5PSIxNTYiIHdpZHRoPSIzMCIgaGVpZ2h0PSIyNCIgcng9IjUiIGZpbGw9IiNlY2U5ZTMiLz4KICAgIDxyZWN0IHg9IjE2NiIgeT0iMTU2IiB3aWR0aD0iMzAiIGhlaWdodD0iMjQiIHJ4PSI1IiBmaWxsPSIjZWNlOWUzIi8+CiAgICA8cmVjdCB4PSI1MiIgIHk9IjE4OCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjI0IiByeD0iNSIgZmlsbD0iI2VjZTllMyIvPgogICAgPHJlY3QgeD0iOTAiICB5PSIxODgiIHdpZHRoPSIzMCIgaGVpZ2h0PSIyNCIgcng9IjUiIGZpbGw9IiNlY2U5ZTMiLz4KICAgIDxyZWN0IHg9IjEyOCIgeT0iMTg4IiB3aWR0aD0iMzAiIGhlaWdodD0iMjQiIHJ4PSI1IiBmaWxsPSIjZWNlOWUzIi8+CiAgICA8cmVjdCB4PSIxNjYiIHk9IjE4OCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjI0IiByeD0iNSIgZmlsbD0iI2VjZTllMyIvPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTU4LDE0Mikgcm90YXRlKDQ1KSI+CiAgICAgIDxyZWN0IHg9Ii04IiB5PSItNjQiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgcng9IjYiIGZpbGw9IiNmMGE4OTgiLz4KICAgICAgPHJlY3QgeD0iLTgiIHk9Ii00OCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjgiIHJ4PSIyIiBmaWxsPSIjY2NjIi8+CiAgICAgIDxyZWN0IHg9Ii04IiB5PSItNDAiIHdpZHRoPSIxNiIgaGVpZ2h0PSIyOCIgcng9IjMiIGZpbGw9IiNmNWM4NDIiLz4KICAgICAgPGxpbmUgeDE9Ii04IiB5MT0iLTM2IiB4Mj0iLTgiIHkyPSItMTIiIHN0cm9rZT0iI2U4YjgzMCIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9Ii40Ii8+CiAgICAgIDxsaW5lIHgxPSI4IiAgeTE9Ii0zNiIgeDI9IjgiICB5Mj0iLTEyIiBzdHJva2U9IiNlOGI4MzAiIHN0cm9rZS13aWR0aD0iMS41IiBvcGFjaXR5PSIuMjUiLz4KICAgICAgPHBvbHlnb24gcG9pbnRzPSItOCwtMTIgOCwtMTIgMCw4IiBmaWxsPSIjZDQ5NTZhIi8+CiAgICAgIDxwb2x5Z29uIHBvaW50cz0iLTMsNCAzLDQgMCwxMiIgZmlsbD0iIzFhMWExYSIvPgogICAgPC9nPgogIDwvZz4KICA8cmVjdCB4PSIyMCIgeT0iMjAiIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iNTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwuMDcpIiBzdHJva2Utd2lkdGg9IjEuNSIvPgo8L3N2Zz4=">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>手書きカレンダー</title>
+
 <style>
-:root {
-  --bg:          #f6f5f3;
-  --surface:     #ffffff;
-  --border:      #e2e0dc;
-  --border-soft: #ece9e4;
-  --ink:         #1c1a18;
-  --ink-mid:     #6b6560;
-  --ink-faint:   #b5b0a8;
-  --sun-bg:      #fdf1f1;
-  --sun-txt:     #b84040;
-  --sat-bg:      #f1f4fb;
-  --sat-txt:     #3a6fa8;
-  --hol-bg:      #fdf1f1;
-  --hol-txt:     #b84040;
+/* ════════════════════════════════════════════
+   DESIGN TOKENS
+════════════════════════════════════════════ */
+:root{
+  /* サイズ */
+  --toolbar-h:   152px;   /* 縦長: ツールバー固定高さ */
+  --sidebar-w:   310px;   /* 横長: サイドパネル幅 */
+
+  /* カラー */
+  --bg:          #f5f3ef;
+  --surface:     #faf9f7;
+  --ink:         #2c2a26;
+  --ink-mid:     #6b6962;
+  --ink-faint:   #a09d98;
+  --border:      rgba(44,42,38,.18);
+  --border-soft: rgba(44,42,38,.10);
+  --inactive-bg: #ece9e3;
+  --tool-hover:  rgba(44,42,38,.07);
+  --tool-active: #2c2a26;
   --today-ring:  #c8a84b;
-  --inactive-bg: #efede9;
-  --tool-active: #1c1a18;
-  --tool-hover:  #f0ede8;
-  --shadow-md:   0 4px 16px rgba(0,0,0,.10);
-  --r:           6px;
-  --font-body:   'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
-  --font-disp:   'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
-  /* toolbar fixed height — portrait */
-  --toolbar-h:   152px;
-  /* landscape side bar width */
-  --sidebar-w:   310px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{
-  height:100%;overflow:hidden;background:var(--bg);
-  /* 長押しによるテキスト選択・コールアウトを無効化 */
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-touch-callout:none;
-}
-body{font-family:var(--font-body);color:var(--ink);}
+  --sun-bg:      rgba(180,40,40,.05);
+  --sun-txt:     #b42828;
+  --sat-bg:      rgba(40,80,180,.05);
+  --sat-txt:     #2850b4;
+  --hol-bg:      rgba(180,40,40,.05);
+  --hol-txt:     #b42828;
+  --shadow-md:   0 4px 20px rgba(0,0,0,.10);
 
-/* ── screens ── */
-.screen{display:none;position:absolute;inset:0;flex-direction:column;}
-.screen.active{display:flex;}
+  /* タイポグラフィ */
+  --font-body: 'M PLUS Rounded 1c', 'Hiragino Sans', sans-serif;
+  --font-disp: 'M PLUS Rounded 1c', 'Hiragino Sans', sans-serif;
 
-/* ══════════════════════════════════════
-   CALENDAR SCREEN
-══════════════════════════════════════ */
-.cal-header{
-  display:flex; flex-direction:column;
-  background:var(--surface);
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;
+  /* その他 */
+  --r: 6px;
 }
 
-/* 上段：タブ ＋ グループ追加ボタン */
-.cal-header-top{
-  display:flex; align-items:flex-end; gap:0;
-  padding:0 12px 0 8px;
-  border-bottom:1px solid var(--border-soft);
-  background:var(--surface);
+/* ════════════════════════════════════════════
+   RESET & BASE
+════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  font-family: var(--font-body);
+  color: var(--ink);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+button:focus,
+button:active,
+button:focus-visible { outline: none; background: transparent; }
+
+/* ════════════════════════════════════════════
+   SCREENS
+════════════════════════════════════════════ */
+.screen {
+  display: none;
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+}
+.screen.active { display: flex; }
+
+/* ════════════════════════════════════════════
+   CALENDAR SCREEN — ヘッダー
+════════════════════════════════════════════ */
+.cal-header {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 
-/* タブコンテナ */
-.cal-tabs{
-  display:flex; align-items:flex-end;
-  gap:2px; flex:1;
-  overflow-x:auto; overflow-y:hidden;
-  scrollbar-width:none;
-  padding-top:6px;
+/* 上段: タブ + カレンダー追加ボタン */
+.cal-header-top {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding: 0 12px 0 8px;
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--surface);
 }
-.cal-tabs::-webkit-scrollbar{ display:none; }
+.cal-tabs {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  padding-top: 6px;
+}
+.cal-tabs::-webkit-scrollbar { display: none; }
+.cal-tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px 6px;
+  background: none;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: var(--r) var(--r) 0 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--ink-faint);
+  white-space: nowrap;
+  position: relative;
+  margin-bottom: -1px;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.cal-tab:hover  { background: var(--tool-hover); color: var(--ink); }
+.cal-tab.active { background: var(--bg); color: var(--ink); border-color: var(--border-soft); font-weight: 600; }
+.cal-tab-input {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  min-width: 40px;
+  padding: 0;
+}
+.btn-add-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  margin-left: 4px;
+  margin-bottom: 6px;
+  align-self: center;
+  background: none;
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--ink-mid);
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.btn-add-group:hover { background: var(--tool-hover); border-color: var(--ink-mid); color: var(--ink); }
+.btn-add-group svg   { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; flex-shrink: 0; }
 
-/* 個別タブ */
-.cal-tab{
-  display:flex; align-items:center; gap:6px;
-  padding:7px 14px 6px;
-  background:none; border:none; cursor:pointer;
-  font-size:13px; font-weight:500;
-  font-family:var(--font-body);
-  color:var(--ink-faint);
-  border-radius:var(--r) var(--r) 0 0;
-  border:1px solid transparent;
-  border-bottom:none;
-  white-space:nowrap;
-  transition:background .12s, color .12s, border-color .12s;
-  position:relative;
-  margin-bottom:-1px; /* border-bottomに重ねて消す */
+/* 下段: 月ナビゲーション */
+.cal-header-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
 }
-.cal-tab:hover{
-  background:var(--tool-hover);
-  color:var(--ink);
+.cal-title {
+  font-family: var(--font-disp);
+  font-size: 22px;
+  letter-spacing: .02em;
+  flex: 1;
+  text-align: center;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  justify-content: center;
 }
-.cal-tab.active{
-  background:var(--bg);
-  color:var(--ink);
-  border-color:var(--border-soft);
-  font-weight:600;
-}
+.cal-title-year { font-size: 13px; color: var(--ink-mid); font-family: var(--font-body); font-weight: 300; }
 
-/* グループ追加ボタン */
-.btn-add-group{
-  display:flex; align-items:center; gap:5px;
-  padding:5px 10px;
-  margin-left:4px; margin-bottom:6px;
-  background:none; border:1.5px solid var(--border);
-  border-radius:var(--r); cursor:pointer;
-  font-size:12px; font-weight:500; font-family:var(--font-body);
-  color:var(--ink-mid);
-  transition:background .15s, border-color .15s, color .15s;
-  flex-shrink:0;
-  white-space:nowrap;
-  align-self:center;
+/* ════════════════════════════════════════════
+   CALENDAR SCREEN — グリッド
+════════════════════════════════════════════ */
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-soft);
+  flex-shrink: 0;
 }
-.btn-add-group:hover{
-  background:var(--tool-hover);
-  border-color:var(--ink-mid);
-  color:var(--ink);
+.wd {
+  text-align: center;
+  padding: 5px 0;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--ink-faint);
 }
-.btn-add-group svg{
-  width:14px; height:14px;
-  stroke:currentColor; fill:none;
-  stroke-width:2; stroke-linecap:round;
-  flex-shrink:0;
-}
+.wd.sun { color: var(--sun-txt); }
+.wd.sat { color: var(--sat-txt); }
 
-/* タブ名インライン編集 */
-.cal-tab-input{
-  font-size:13px; font-weight:600;
-  font-family:var(--font-body);
-  border:none; outline:none;
-  background:transparent;
-  color:var(--ink);
-  min-width:40px; width:auto;
-  padding:0;
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  overflow: hidden;
+  border-left: 1px solid var(--border-soft);
+  border-top: 1px solid var(--border-soft);
+  align-content: start;
 }
-/* 下段：月ナビゲーション */
-.cal-header-nav{
-  display:flex; align-items:center; gap:10px;
-  padding:8px 16px;
-}
-.cal-title{
-  font-family:var(--font-disp);font-size:22px;letter-spacing:.02em;
-  flex:1;text-align:center;display:flex;align-items:baseline;
-  gap:6px;justify-content:center;
-}
-.cal-title-year{font-size:13px;color:var(--ink-mid);font-family:var(--font-body);font-weight:300;}
+#cal-screen.portrait-grid  .cal-grid { grid-template-columns: repeat(7, 1fr); }
+#cal-screen.landscape-grid .cal-grid { align-content: start; }
 
-.icon-btn{
-  width:34px;height:34px;border:none;background:transparent;
-  cursor:pointer;border-radius:var(--r);color:var(--ink);
-  display:flex;align-items:center;justify-content:center;
-  transition:background .15s;flex-shrink:0;
-  outline:none;
-  -webkit-tap-highlight-color:transparent;
-  -webkit-appearance:none;
+.cal-cell {
+  border-right: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--surface);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: filter .12s;
 }
-.icon-btn:hover{background:var(--tool-hover);}
-.icon-btn:focus, .icon-btn:active{outline:none;}
-.icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.cal-cell:active   { filter: brightness(.96); }
+.cal-cell.inactive { background: var(--inactive-bg); pointer-events: none; }
+.cal-cell.today    { box-shadow: inset 0 0 0 2px var(--today-ring); }
+.cal-cell.is-sun   { background: var(--sun-bg); }
+.cal-cell.is-sat   { background: var(--sat-bg); }
+.cal-cell.is-hol   { background: var(--hol-bg); }
+.cal-cell.drag-over { background: rgba(58,111,168,.10) !important; box-shadow: inset 0 0 0 2px #3a6fa8; }
 
-.cal-weekdays{
-  display:grid;grid-template-columns:repeat(7,1fr);
-  background:var(--surface);border-bottom:1px solid var(--border-soft);flex-shrink:0;
+.cell-top {
+  display: flex;
+  align-items: flex-start;
+  padding: 3px 5px 2px;
+  flex-shrink: 0;
+  height: var(--cell-date-h, 20px);
 }
-.wd{
-  text-align:center;padding:5px 0;
-  font-size:10px;font-weight:500;letter-spacing:.08em;
-  color:var(--ink-faint);text-transform:uppercase;
+.cell-num {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.wd.sun{color:var(--sun-txt);}
-.wd.sat{color:var(--sat-txt);}
+.cal-cell.today .cell-num { font-weight: 700; color: var(--ink); }
+.cell-hol-name {
+  font-size: 7.5px;
+  color: var(--hol-txt);
+  margin-left: 3px;
+  line-height: 1;
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cell-preview {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.cal-cell.landscape-cell .cell-top {
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 6px;
+  overflow: hidden;
+}
+.cell-remaining {
+  flex: 1;
+  background: var(--inactive-bg);
+}
+.cal-grid-area {
+  flex: 1;
+  overflow: hidden;
+  overflow-x: auto;
+  position: relative;
+  background: var(--bg);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+@keyframes cal-fadein { from { opacity: 0; } to { opacity: 1; } }
+.cal-grid-area.tab-switching { animation: cal-fadein 0.6s ease forwards; }
 
-.cal-grid{
-  /* 列・行はJSで動的に設定する */
-  display:grid;
-  grid-template-columns:repeat(7,1fr); /* 初期値、JS上書き */
-  overflow:hidden;
-  border-left:1px solid var(--border-soft);
-  border-top:1px solid var(--border-soft);
-  /* 縦長: 上詰め / 横長: 左詰め — JSでクラス切り替え */
-  align-content:start;
-}
-/* 縦長: セル高さをJSが height で指定、グリッドは列幅均等 */
-#cal-screen.portrait-grid .cal-grid{
-  grid-template-columns:repeat(7,1fr);
-  /* auto行 */
-}
-/* 横長: 列幅をJSが指定、グリッドは行高さ均等 */
-#cal-screen.landscape-grid .cal-grid{
-  align-content:start;
-}
+/* ════════════════════════════════════════════
+   DAY CELL SCREEN — 共通
+════════════════════════════════════════════ */
+#day-screen { background: var(--bg); }
+#day-screen.portrait  { flex-direction: column; }
+#day-screen.landscape { flex-direction: row; }
 
-.cal-cell{
-  border-right:1px solid var(--border-soft);border-bottom:1px solid var(--border-soft);
-  background:var(--surface);cursor:pointer;position:relative;
-  display:flex;flex-direction:column;overflow:hidden;
-  transition:filter .12s;
-  /* 縦長: height はJS設定 / 横長: width はJS設定 */
+/* 共通: アイコンボタン */
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--r);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s;
+  flex-shrink: 0;
+  outline: none;
+  -webkit-appearance: none;
 }
-.cal-cell:active{filter:brightness(.96);}
-.cal-cell.inactive{background:var(--inactive-bg);pointer-events:none;}
-.cal-cell.today{box-shadow:inset 0 0 0 2px var(--today-ring);}
-/* weekend / holiday tinting */
-.cal-cell.is-sun{background:var(--sun-bg);}
-.cal-cell.is-sat{background:var(--sat-bg);}
-.cal-cell.is-hol{background:var(--hol-bg);}
+.icon-btn:hover                        { background: var(--tool-hover); }
+.icon-btn:focus,
+.icon-btn:active,
+.icon-btn:focus-visible                { outline: none; background: transparent; }
+.icon-btn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
-/* 縦長: 日付エリア上 / 描画エリアが正方形 */
-.cell-top{
-  display:flex;align-items:flex-start;
-  padding:3px 5px 2px;
-  flex-shrink:0;
-  height:var(--cell-date-h, 20px); /* JSで上書き */
+/* ════════════════════════════════════════════
+   DAY CELL SCREEN — 縦長（portrait）
+════════════════════════════════════════════ */
+.day-topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  height: var(--toolbar-h);
+  overflow: hidden;
 }
-.cell-num{font-size:11px;font-weight:500;color:var(--ink-mid);line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.cal-cell.today .cell-num{font-weight:700;color:var(--ink);}
-.cal-cell.is-sun .cell-num{color:var(--sun-txt);}
-.cal-cell.is-sat .cell-num{color:var(--sat-txt);}
-.cal-cell.is-hol .cell-num{color:var(--hol-txt);}
-.cell-hol-name{font-size:7.5px;color:var(--hol-txt);margin-left:3px;line-height:1;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#day-screen.portrait  .day-topbar      { display: flex; }
+#day-screen.portrait  .day-sidebar-land{ display: none; }
+#day-screen.landscape .day-topbar      { display: none; }
+#day-screen.landscape .day-sidebar-land{ display: flex; }
 
-/* 描画プレビュー: 正方形を維持するためJSがwidthとheightを明示設定 */
-.cell-preview{
-  position:relative;overflow:hidden;flex-shrink:0;
+/* Row1: 戻る / 日付 / Undo */
+.tb-row1 {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  padding: 10px 16px 8px;
+  flex-shrink: 0;
 }
-.cell-preview canvas{position:absolute;inset:0;width:100%;height:100%;}
+.day-badge-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  align-self: center;
+}
+.day-date-row { display: flex; align-items: baseline; gap: 8px; }
+.day-num  { font-size: 26px; font-weight: 600; color: var(--ink-faint); line-height: 1; }
+.day-dow  { font-size: 14px; color: var(--ink-faint); font-weight: 400; }
+.day-sub  { font-size: 11px; color: var(--ink-faint); font-weight: 300; }
+.spacer   { flex: 1; }
+.ur-row {
+  display: flex;
+  gap: 2px;
+  padding-right: 8px;
+  align-self: flex-end;
+  padding-bottom: 2px;
+  margin-left: 16px;
+}
+.ur-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 8px;
+  color: var(--ink);
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .12s, opacity .12s;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+  outline: none;
+}
+.ur-btn:hover                              { background: var(--tool-hover); }
+.ur-btn:focus, .ur-btn:active,
+.ur-btn:focus-visible                      { outline: none; background: transparent; }
+.ur-btn:disabled                           { opacity: .28; cursor: default; }
+.ur-btn svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
-/* 横長モード: セルが横長になる (左に日付エリア、右に正方形) */
-.cal-cell.landscape-cell{
-  flex-direction:row;
+/* 縦長: 戻るボタン */
+#btn-back {
+  width: 60px;
+  height: 60px;
+  margin-left: -10px;
+  align-self: center;
+  background: transparent;
+  -webkit-appearance: none;
+  outline: none;
 }
-.cal-cell.landscape-cell .cell-top{
-  flex-direction:column;
-  align-items:flex-start;
-  height:auto;
-  width:var(--cell-date-w, 28px);
-  flex-shrink:0;
-  padding:4px 4px 4px 5px;
-}
-.cal-cell.landscape-cell .cell-preview{
-  flex:1;
-}
-/* 残余スペース（セルなし領域）*/
-.cal-remainder{
-  background:var(--bg);
-  border-left:1px solid var(--border-soft);
-}
+#btn-back:focus, #btn-back:active { background: transparent; outline: none; }
+#btn-back svg { width: 40px; height: 40px; stroke-width: 2.4; }
 
-/* ── CALENDAR GRID AREA WRAPPER ── */
-.cal-grid-area{
-  flex:1;
-  overflow:hidden;
-  overflow-x:auto;
-  position:relative;
-  background:var(--bg);
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
+/* Row2: ツールボタン */
+.tb-row2 {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 0;
+  flex-shrink: 0;
 }
+.tool-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex: 1;
+  padding: 8px 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  font-family: var(--font-body);
+  white-space: nowrap;
+  letter-spacing: .02em;
+  border-radius: var(--r);
+  transition: background .12s, color .12s;
+}
+.tool-btn svg    { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.tool-btn:hover  { background: var(--tool-hover); }
+.tool-btn.active { background: var(--tool-active); color: #fff; }
 
-@keyframes cal-fadein {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-.cal-grid-area.tab-switching {
-  animation: cal-fadein 0.6s ease forwards;
-}
-#day-screen{background:var(--bg);}
-#day-screen.portrait{flex-direction:column;}
-#day-screen.landscape{flex-direction:row;}
-
-/* ── PORTRAIT: top bar is fixed height ── */
-.day-topbar{
-  background:var(--surface);border-bottom:1px solid var(--border);
-  flex-shrink:0;display:flex;flex-direction:column;
-  /* fixed height so tools don't shift the canvas */
-  height:var(--toolbar-h);
-  overflow:hidden;
-}
-
-/* row 1: back + date + undo */
-.tb-row1{
-  display:flex;align-items:flex-end;gap:0;
-  padding:10px 16px 8px;flex-shrink:0;
-}
-#btn-back{ align-self:center; }
-.day-badge-inline{ align-self:center; }
-.day-badge-inline{
-  display:flex; flex-direction:column; gap:1px;
-}
-.day-date-row{
-  display:flex; align-items:baseline; gap:8px;
-}
-.day-num{font-size:26px;font-weight:600;color:var(--ink-faint);line-height:1;}
-.day-dow{font-size:14px;color:var(--ink-faint);font-weight:400;}
-.day-sub{font-size:11px;color:var(--ink-faint);font-weight:300;}
-.spacer{flex:1;}
-.ur-row{display:flex;gap:2px;padding-right:8px;align-self:flex-end;padding-bottom:2px;margin-left:16px;}
-.ur-btn{
-  background:none;border:none;
-  cursor:pointer;padding:6px 8px;
-  transition:background .12s, opacity .12s;
-  color:var(--ink);border-radius:var(--r);
-  display:flex;align-items:center;justify-content:center;
-  -webkit-tap-highlight-color:transparent;
-  outline:none;
-}
-.ur-btn:hover{background:var(--tool-hover);}
-.ur-btn:focus, .ur-btn:active{outline:none;}
-.ur-btn:disabled{opacity:.28;cursor:default;}
-.ur-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-
-/* row 2: tool buttons */
-.tb-row2{
-  display:flex;align-items:center;padding:0 8px;gap:0;flex-shrink:0;
-}
-.tool-btn{
-  display:flex;align-items:center;justify-content:center;gap:5px;
-  flex:1;padding:8px 4px;background:none;border:none;cursor:pointer;
-  font-size:13px;font-weight:500;color:var(--ink-mid);
-  font-family:var(--font-body);transition:background .12s,color .12s;
-  white-space:nowrap;letter-spacing:.02em;border-radius:var(--r);
-}
-.tool-btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
-.tool-btn:hover{background:var(--tool-hover);}
-.tool-btn.active{background:var(--tool-active);color:#fff;}
-
-/* row 3: options — always present, content swapped by JS */
-.tb-row3{
-  display:flex;align-items:center;padding:8px 16px;gap:20px;
-  flex-shrink:0;min-height:0;flex:1;border-top:1px solid var(--border-soft);
-}
-.opt-block{display:flex;align-items:center;gap:10px;}
-.opt-label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-weight:600;white-space:nowrap;}
-.swatches{display:flex;gap:10px;flex-wrap:wrap;}
-.swatch{
-  width:22px;height:22px;border-radius:50%;border:2.5px solid transparent;
-  cursor:pointer;transition:transform .1s,border-color .1s,outline .1s;
-}
-.swatch.on{
-  border-color:transparent;
-  outline:2px solid var(--ink);
-  outline-offset:2px;
-  transform:scale(1.1);
-}
-.sz-row{display:flex;gap:6px;}
-.sz-btn{
-  background:none;border:1px solid var(--border);border-radius:var(--r);
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  padding:5px 9px;transition:background .12s,border-color .12s;min-height:30px;
-}
-.sz-btn.on{background:var(--ink);border-color:var(--ink);}
-.dot{border-radius:50%;background:var(--ink);display:block;pointer-events:none;}
-.sz-btn.on .dot{background:#fff;}
-.sz-lbl{font-size:13px;font-family:var(--font-body);pointer-events:none;padding:0 2px;}
-.sz-btn.on .sz-lbl{color:#fff;}
-
-/* ── LANDSCAPE: side panel ── */
-.day-sidebar-land{
-  background:var(--surface);border-right:1px solid var(--border);
-  width:var(--sidebar-w);flex-shrink:0;
-  display:flex;flex-direction:column;gap:12px;padding:14px 12px;
-  overflow-y:auto;
-}
-
-/* show/hide based on orientation */
-#day-screen.portrait  .day-topbar{display:flex;}
-#day-screen.portrait  .day-sidebar-land{display:none;}
-#day-screen.landscape .day-topbar{display:none;}
-#day-screen.landscape .day-sidebar-land{display:flex;}
-
-/* landscape tool layout */
-.land-row1{display:flex;align-items:flex-end;gap:0;flex-wrap:nowrap;margin-left:-12px;}
-#btn-back-land{ align-self:center; }
-.land-badge{ align-self:center; }
-.land-badge{display:flex;flex-direction:column;gap:2px;}
-.land-date-row{display:flex;align-items:baseline;gap:6px;white-space:nowrap;}
-.land-day-num{font-family:var(--font-disp);font-size:38px;color:var(--ink-faint);line-height:1;white-space:nowrap;}
-.land-day-dow{font-size:16px;color:var(--ink-faint);font-weight:400;white-space:nowrap;}
-.land-day-sub{font-size:10px;color:var(--ink-faint);font-weight:300;white-space:nowrap;}
-
-/* 横長レイアウトの戻るボタン */
-/* 縦長の戻るボタン */
-#btn-back{
-  width:60px; height:60px;
-  margin-left:-10px;
-  background:transparent;
-  -webkit-appearance:none;
-  outline:none;
-  -webkit-tap-highlight-color:transparent;
-}
-#btn-back:focus, #btn-back:active{
-  background:transparent;
-  outline:none;
-}
-#btn-back svg{
-  width:40px; height:40px;
-  stroke-width:2.4;
-}
-
-/* 横長の戻るボタン */
-#btn-back-land{
-  width:80px; height:80px;
-}
-#btn-back-land svg{
-  width:56px; height:56px;
-  stroke-width:2.4;
-}
-
-.land-tool-group{
-  display:flex;flex-direction:column;
-  background:var(--bg);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;
-}
-.land-tool-btn{
-  display:flex;align-items:center;gap:8px;padding:10px 12px;
-  width:100%;background:none;border:none;cursor:pointer;
-  font-size:13px;font-weight:500;color:var(--ink-mid);
-  font-family:var(--font-body);transition:background .12s,color .12s;
-  border-radius:var(--r);
-}
-.land-tool-btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-.land-tool-btn:hover{background:var(--tool-hover);}
-.land-tool-btn.active{background:var(--tool-active);color:#fff;}
-
-.land-opts{display:flex;flex-direction:column;gap:10px;}
-.land-opt-label{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-faint);font-weight:600;margin-bottom:4px;}
-.land-swatches{display:flex;gap:5px;flex-wrap:wrap;}
-.land-ur{display:flex;gap:5px;margin-top:auto;}
-
-/* draw area */
-.draw-wrap{
-  flex:1;display:flex;background:var(--bg);overflow:hidden;
-  /* 縦画面: 上寄せ・左右中央 / 横画面: 左寄せ・上下中央 — JSでクラス切替 */
-}
-.draw-wrap.portrait-wrap {
-  align-items:flex-start;
-  justify-content:center;
-}
-.draw-wrap.landscape-wrap {
-  align-items:center;
-  justify-content:flex-start;
-}
-#draw-canvas{
-  background:#fff;
-  box-shadow:0 2px 12px rgba(0,0,0,.10),0 0 0 1px var(--border);
-  display:block;touch-action:none;
+/* Row3: オプション（JSで内容を差し替え）*/
+.tb-row3 {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  gap: 20px;
+  flex-shrink: 0;
+  min-height: 0;
+  flex: 1;
+  border-top: 1px solid var(--border-soft);
 }
 
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════
+   DAY CELL SCREEN — 横長（landscape）
+════════════════════════════════════════════ */
+.day-sidebar-land {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 12px;
+  overflow-y: auto;
+}
+.land-row1 {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  flex-wrap: nowrap;
+  margin-left: -12px;
+}
+.land-badge {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-self: center;
+}
+.land-date-row { display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+.land-day-num  { font-size: 38px; color: var(--ink-faint); line-height: 1; white-space: nowrap; }
+.land-day-dow  { font-size: 16px; color: var(--ink-faint); font-weight: 400; white-space: nowrap; }
+.land-day-sub  { font-size: 10px; color: var(--ink-faint); font-weight: 300; white-space: nowrap; }
+
+/* 横長: 戻るボタン */
+#btn-back-land {
+  width: 80px;
+  height: 80px;
+  align-self: center;
+}
+#btn-back-land svg { width: 56px; height: 56px; stroke-width: 2.4; }
+
+.land-tool-group {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.land-tool-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  font-family: var(--font-body);
+  border-radius: var(--r);
+  transition: background .12s, color .12s;
+}
+.land-tool-btn svg    { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.land-tool-btn:hover  { background: var(--tool-hover); }
+.land-tool-btn.active { background: var(--tool-active); color: #fff; }
+
+.land-opts      { display: flex; flex-direction: column; gap: 10px; }
+.land-opt-label { font-size: 9px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-faint); font-weight: 600; margin-bottom: 4px; }
+.land-swatches  { display: flex; gap: 5px; flex-wrap: wrap; }
+
+/* ════════════════════════════════════════════
+   DAY CELL SCREEN — キャンバスエリア
+════════════════════════════════════════════ */
+.draw-wrap {
+  flex: 1;
+  display: flex;
+  background: var(--bg);
+  overflow: hidden;
+}
+.draw-wrap.portrait-wrap  { align-items: flex-start; justify-content: center; }
+.draw-wrap.landscape-wrap { align-items: center;     justify-content: flex-start; }
+#draw-canvas {
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,.10), 0 0 0 1px var(--border);
+  display: block;
+  touch-action: none;
+}
+
+/* ════════════════════════════════════════════
+   TOOL OPTIONS（ペン/消しゴム/テキスト）
+════════════════════════════════════════════ */
+.opt-block  { display: flex; align-items: center; gap: 10px; }
+.opt-label  { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-faint); font-weight: 600; white-space: nowrap; }
+.swatches   { display: flex; gap: 10px; flex-wrap: wrap; }
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  cursor: pointer;
+  transition: transform .1s, border-color .1s, outline .1s;
+}
+.swatch.on {
+  border-color: transparent;
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  transform: scale(1.1);
+}
+.sz-row { display: flex; gap: 6px; }
+.sz-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 9px;
+  transition: background .12s, border-color .12s;
+  min-height: 30px;
+}
+.sz-btn.on           { background: var(--ink); border-color: var(--ink); }
+.dot                 { border-radius: 50%; background: var(--ink); display: block; pointer-events: none; }
+.sz-btn.on .dot      { background: #fff; }
+.sz-lbl              { font-size: 13px; font-family: var(--font-body); pointer-events: none; padding: 0 2px; }
+.sz-btn.on .sz-lbl   { color: #fff; }
+
+/* ════════════════════════════════════════════
    SETTINGS OVERLAY
-══════════════════════════════════════ */
-.overlay{display:none;position:fixed;inset:0;z-index:80;}
-.overlay.open{display:flex;}
-.ovl-bd{position:absolute;inset:0;background:rgba(0,0,0,.15);}
-.settings-panel{
-  position:absolute;right:12px;top:54px;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:10px;padding:18px;
-  box-shadow:var(--shadow-md);min-width:210px;z-index:1;
+════════════════════════════════════════════ */
+.overlay { display: none; position: fixed; inset: 0; z-index: 80; }
+.overlay.open { display: flex; }
+.ovl-bd { position: absolute; inset: 0; background: rgba(0,0,0,.15); }
+.settings-panel {
+  position: absolute;
+  right: 12px;
+  top: 54px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: var(--shadow-md);
+  min-width: 210px;
+  z-index: 1;
 }
-.settings-panel h3{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:14px;}
-.s-row{margin-bottom:12px;}
-.s-row label{display:block;font-size:11px;color:var(--ink-mid);margin-bottom:5px;}
-.s-row select{
-  width:100%;border:1px solid var(--border);border-radius:var(--r);
-  padding:6px 8px;font-size:13px;font-family:var(--font-body);
-  background:var(--bg);cursor:pointer;outline:none;color:var(--ink);
+.settings-panel h3 { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-mid); margin-bottom: 14px; }
+.s-row             { margin-bottom: 12px; }
+.s-row label       { display: block; font-size: 11px; color: var(--ink-mid); margin-bottom: 5px; }
+.s-row select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 6px 8px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  background: var(--bg);
+  cursor: pointer;
+  outline: none;
+  color: var(--ink);
 }
-.s-btn{
-  width:100%;display:flex;align-items:center;gap:7px;
-  padding:7px 10px;border:1px solid var(--border);border-radius:var(--r);
-  background:var(--bg);cursor:pointer;font-size:13px;font-family:var(--font-body);
-  color:var(--ink);text-align:left;transition:background .12s,border-color .12s;
+.s-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--ink);
+  text-align: left;
+  transition: background .12s, border-color .12s;
 }
-.s-btn:hover{background:var(--tool-hover);border-color:var(--ink-mid);}
+.s-btn:hover { background: var(--tool-hover); border-color: var(--ink-mid); }
 
-.cal-cell.drag-over{
-  background:rgba(58,111,168,0.10) !important;
-  box-shadow:inset 0 0 0 2px #3a6fa8;
+/* ════════════════════════════════════════════
+   STICKER DROPDOWN
+════════════════════════════════════════════ */
+#stk-dropdown {
+  display: none;
+  position: fixed;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.14);
+  z-index: 500;
+  width: min(360px, 90vw);
 }
-#stk-dropdown{
-  display:none;
-  position:fixed;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:12px;
-  box-shadow:0 6px 24px rgba(0,0,0,.14);
-  z-index:500;
-  width:min(360px, 90vw);
+#stk-dropdown.open { display: block; }
+.stk-inline-grid   { display: flex; flex-wrap: wrap; gap: 6px; }
+.stk-inline-item {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--r);
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform .1s;
 }
-#stk-dropdown.open{ display:block; }
-.stk-inline-grid{
-  display:flex;flex-wrap:wrap;gap:6px;
-}
-.stk-inline-item{
-  width:40px;height:40px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:var(--r);cursor:pointer;
-  background:var(--bg);border:1.5px solid var(--border-soft);
-  transition:background .12s,transform .12s;flex-shrink:0;
-}
-.stk-inline-item:hover{background:#e8e5e0;transform:scale(1.1);}
-.stk-inline-item.stk-selected{border-color:var(--ink);background:var(--tool-hover);}
-.stk-inline-item svg{width:26px;height:26px;}
+.stk-inline-item:hover      { background: var(--tool-hover); transform: scale(1.1); }
+.stk-inline-item.stk-selected { border-color: var(--ink); background: var(--tool-hover); }
+.stk-inline-item svg        { width: 26px; height: 26px; }
 
-/* ══════════════════════════════════════
+/* ════════════════════════════════════════════
    CONTEXT MENUS
-══════════════════════════════════════ */
-.ctx-menu{
-  display:none;position:fixed;z-index:200;
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:10px;padding:4px;box-shadow:var(--shadow-md);min-width:154px;
+════════════════════════════════════════════ */
+.ctx-menu {
+  display: none;
+  position: fixed;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-md);
+  z-index: 600;
+  min-width: 180px;
+  padding: 4px 0;
+  overflow: hidden;
 }
-.ctx-menu.open{display:block;}
-.ctx-item{
-  padding:8px 12px;font-size:12px;border-radius:var(--r);
-  cursor:pointer;display:flex;align-items:center;gap:8px;
-  color:var(--ink);transition:background .1s;
+.ctx-menu.open { display: block; }
+.ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: background .1s;
+  color: var(--ink);
 }
-.ctx-item:hover{background:var(--tool-hover);}
-.ctx-item.ctx-hover{background:var(--tool-hover);}  /* 長押しスライド中のハイライト */
+.ctx-item:hover    { background: var(--tool-hover); }
+.ctx-item.ctx-hover{ background: var(--tool-hover); }
 @keyframes ctx-blink {
-  0%,100%{ background:var(--tool-hover); }
-  40%    { background:#c8e0f8; }
+  0%, 100% { background: var(--tool-hover); }
+  40%      { background: #c8e0f8; }
 }
-.ctx-item.ctx-blink{ animation: ctx-blink 0.25s ease 2; }
-.ctx-item.danger{color:#b84040;}
-.ctx-item svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
-.ctx-sep{height:1px;background:var(--border-soft);margin:3px 0;}
+.ctx-item.ctx-blink { animation: ctx-blink 0.25s ease 2; }
+.ctx-item.danger    { color: #b84040; }
+.ctx-item svg       { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ctx-sep            { height: 1px; background: var(--border-soft); margin: 3px 0; }
+
+/* ════════════════════════════════════════════
+   TRANSITION LAYER（画面遷移アニメーション用）
+════════════════════════════════════════════ */
+/* #transition-canvas は inline style で制御 */
+
+#debug-overlay{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,.85);color:#0f0;
+  font:11px monospace;padding:8px;
+  max-height:160px;overflow-y:auto;
+  z-index:9999;pointer-events:none;
+}
 </style>
 </head>
 <body>
+<div id="debug-overlay"></div>
+<script>
+const _log = (...a) => {
+  const el = document.getElementById('debug-overlay');
+  if (!el) return;
+  const line = document.createElement('div');
+  line.textContent = new Date().toLocaleTimeString() + ' ' + a.map(x => typeof x === 'object' ? JSON.stringify(x) : x).join(' ');
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+};
+</script>
+
 
 <!-- ══ CALENDAR SCREEN ══ -->
 <div id="cal-screen" class="screen active">
@@ -792,8 +973,7 @@ const STICKERS = [
   {id:"balloon", label:"\u98a8\u8239", url:"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAA/klEQVR4nO3T0Q3CMAxF0Y7EKB2BkRiFkdgEyEdQFaE2rRo/175Pyr/vkTJNjDHlXvPjrb7BZCV071PffMqOhIeAOCP8khAjwi8DYRHvFsEy3h2CIt4NgjJejtBz3HdzWISt8PaFAtgbHw4hNcDR+DAIW0eo4k0Aeo5QAgxH6D1CFe8GYAlhFe4SQPEAACBxPAh8AQAAAACAwVMHSuMBcIxgFg+AQwTzeAAcIcjiPSCo239LHV+XOr4udfxyvTHP2z1WeLu18PaFCm+3Ff8PQX3zsK0BqG8bvrV4EDLEl6UHKEsdv1za8DoAAAAAAPUN0gEAAAAAqG+QLj0AE+8DFkU2xUDkpOsAAAAASUVORK5CYII="},
 ];
 
-/* ── 画像キャッシュ（url → Image オブジェクト）──
-   本番でサーバーURLに差し替えてもまったく同じコードで動作する */
+// ── 画像キャッシュ（url → Image オブジェクト） ──
 const imgCache = {};
 
 function preloadStickerImages() {
@@ -897,7 +1077,7 @@ const PALETTE = [
 ══════════════════════════════════════════════ */
 const today = new Date();
 
-// ── カレンダー一覧（タブごとのデータを管理）──
+// ── カレンダー一覧（タブごとのデータを管理） ──
 const calendars = [
   { id: 'cal-a', name: 'アーティストAのカレンダー', cellData: {} },
   { id: 'cal-b', name: 'アーティストBのカレンダー', cellData: {} },
@@ -978,8 +1158,8 @@ function uid()     { return Math.random().toString(36).slice(2,9); }
 function clone(v)  { return JSON.parse(JSON.stringify(v)); }
 
 /* ════ DATA ════ */
-function getCellObjs(key)      { return S.cellData[key] || []; }
-function setCellObjs(key, arr) { S.cellData[key] = arr; }
+function getCellObjs(key)      { return getActiveCalendar().cellData[key] || []; }
+function setCellObjs(key, arr) { getActiveCalendar().cellData[key] = arr; }
 function cellKey(y,m1,d)       { return `${y}-${String(m1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
 function memoCellKey(lbl)      { return `${S.year}-${String(S.month+1).padStart(2,'0')}-${lbl}`; }
 
@@ -1647,8 +1827,8 @@ function deleteObj(id){
 
 function flushCell(){
   if (!S.currentKey) return;
-  // Draw.objects にはペンオブジェクトも含まれているのでそのままコピー
-  setCellObjs(S.currentKey, clone(Draw.objects));
+  _log && _log("[flush] key:", S.currentKey, "objs:", Draw.objects.length);
+  getActiveCalendar().cellData[S.currentKey] = clone(Draw.objects);
   renderMiniCanvases();
 }
 
@@ -1697,7 +1877,7 @@ function openDayCell(key, label) {
   document.getElementById('day-dow-p').textContent = dowStr;
   document.getElementById('day-dow-l').textContent = dowStr;
 
-  // ── ミニキャンバスの rect を取得（アニメーション開始位置）──
+  // ── ミニキャンバスの rect を取得（アニメーション開始位置） ──
   const miniMc = document.querySelector(`.cell-preview canvas[data-key="${key}"]`);
   const fromRect = miniMc ? miniMc.getBoundingClientRect() : null;
 
@@ -1766,15 +1946,21 @@ function openDayCell(key, label) {
 function goBack(){
   finalizePenObjs(); finalizeText();
   Draw.undoStk=[]; Draw.redoStk=[];
-  S.clipboard=null; // 画面遷移でクリップボードをクリア
+  S.clipboard=null;
+  _log('[goBack] key:', S.currentKey, 'objs:', Draw.objects.length);
   flushCell();
+  _log('[flush] saved objs:', getActiveCalendar().cellData[S.currentKey]?.length ?? 'undefined');
 
-  // ── アニメーション開始位置（描画キャンバス）──
+  // ── アニメーション開始位置（描画キャンバス） ──
   const fromRect = cvs.getBoundingClientRect();
 
   // カレンダー画面を先に描画してミニキャンバスの位置を確定
   showScreen('calendar');
   renderCalendar();
+
+  // applyCellSizes(rAF) + renderMiniCanvases(20ms) の完了を待って
+  // さらに念押しで再描画する
+  setTimeout(renderMiniCanvases, 100);
 
   // ミニキャンバスの rect を取得（アニメーション終了位置）
   // applyCellSizes は requestAnimationFrame 内なので少し待つ
@@ -1784,7 +1970,7 @@ function goBack(){
       : null;
     const toRect = miniMc ? miniMc.getBoundingClientRect() : null;
 
-    if (!toRect || toRect.width < 2) return;
+    if (!toRect || toRect.width < 2) { renderMiniCanvases(); return; }
 
     const tc   = document.getElementById('transition-canvas');
     const ctx2 = tc.getContext('2d');
@@ -1829,6 +2015,8 @@ function goBack(){
         tc.style.display   = 'none';
         tc.style.transform = 'none';
         document.getElementById('cal-screen').style.opacity = '1';
+        // アニメーション完了後にミニキャンバスを再描画
+        renderMiniCanvases();
       }, {once: true});
     }));
   };
@@ -1841,92 +2029,128 @@ document.getElementById('btn-back-land').addEventListener('click', goBack);
 
 /* ════ TOOL SWITCHING ════ */
 // Tool options HTML builders (called once, cached)
+/* ════ TOOL SWITCHING ════ */
+
+// パレットのスウォッチHTMLを生成するヘルパー
+function buildSwatchesHTML(id, dataAttr, currentColor) {
+  const items = PALETTE.map(c => {
+    const on = c.hex === currentColor ? ' on' : '';
+    return `<div class="swatch${on}" ${dataAttr}="${c.hex}" style="background:${c.hex}" title="${c.label}"></div>`;
+  }).join('');
+  return `<div class="swatches" id="${id}">${items}</div>`;
+}
+
 function buildOptsHTML(tool) {
-  if (tool==='pen') {
+  if (tool === 'pen') {
     return `
       <div class="opt-block">
         <span class="opt-label">色</span>
-        <div class="swatches" id="po-colors">${PALETTE.map(c=>`<div class="swatch${c.hex===S.penColor?' on':''}" data-color="${c.hex}" style="background:${c.hex}" title="${c.label}"></div>`).join('')}</div>
+        ${buildSwatchesHTML('po-colors', 'data-color', S.penColor)}
       </div>
       <div class="opt-block">
         <span class="opt-label">太さ</span>
         <div class="sz-row">
-          <button class="sz-btn${S.penSize===3?' on':''}" data-size="3"><span class="dot" style="width:8px;height:8px"></span></button>
-          <button class="sz-btn${S.penSize===8?' on':''}" data-size="8"><span class="dot" style="width:16px;height:16px"></span></button>
+          <button class="sz-btn${S.penSize===3?' on':''}" data-size="3">
+            <span class="dot" style="width:8px;height:8px"></span>
+          </button>
+          <button class="sz-btn${S.penSize===8?' on':''}" data-size="8">
+            <span class="dot" style="width:16px;height:16px"></span>
+          </button>
         </div>
       </div>`;
   }
-  if (tool==='eraser') {
+  if (tool === 'eraser') {
     return `
       <div class="opt-block">
         <span class="opt-label">太さ</span>
         <div class="sz-row">
-          <button class="sz-btn${S.eraserSize===12?' on':''}" data-esize="12"><span class="dot" style="width:11px;height:11px;background:#aaa"></span></button>
-          <button class="sz-btn${S.eraserSize===28?' on':''}" data-esize="28"><span class="dot" style="width:20px;height:20px;background:#aaa"></span></button>
+          <button class="sz-btn${S.eraserSize===12?' on':''}" data-esize="12">
+            <span class="dot" style="width:11px;height:11px;background:#aaa"></span>
+          </button>
+          <button class="sz-btn${S.eraserSize===28?' on':''}" data-esize="28">
+            <span class="dot" style="width:20px;height:20px;background:#aaa"></span>
+          </button>
         </div>
       </div>`;
   }
-  if (tool==='text') {
-    const sm = S._textSmall || Math.round(CANVAS_SRC/15);
-    const lg = S._textLarge || Math.round(sm*1.3);
+  if (tool === 'text') {
+    const sm = S._textSmall || Math.round(CANVAS_SRC / 15);
+    const lg = S._textLarge || Math.round(sm * 1.3);
     return `
       <div class="opt-block">
         <span class="opt-label">色</span>
-        <div class="swatches" id="to-colors">${PALETTE.map(c=>`<div class="swatch${c.hex===S.textColor?' on':''}" data-tcolor="${c.hex}" style="background:${c.hex}" title="${c.label}"></div>`).join('')}</div>
+        ${buildSwatchesHTML('to-colors', 'data-tcolor', S.textColor)}
       </div>
       <div class="opt-block">
         <span class="opt-label">大きさ</span>
         <div class="sz-row">
-          <button class="sz-btn${S.textSize===sm?' on':''}" data-tsize="${sm}"><span class="sz-lbl">小</span></button>
-          <button class="sz-btn${S.textSize===lg?' on':''}" data-tsize="${lg}"><span class="sz-lbl">大</span></button>
+          <button class="sz-btn${S.textSize===sm?' on':''}" data-tsize="${sm}">
+            <span class="sz-lbl">小</span>
+          </button>
+          <button class="sz-btn${S.textSize===lg?' on':''}" data-tsize="${lg}">
+            <span class="sz-lbl">大</span>
+          </button>
         </div>
       </div>`;
   }
-  return `<span style="font-size:12px;color:var(--ink-faint);">${
-    tool==='sticker' ? (Draw.pendingStickerId ? 'キャンバスをタップして配置' : 'スタンプを選択中...') :
-    tool==='select'  ? 'オブジェクトをタップして選択・移動' : ''
-  }</span>`;
+  const msg = tool === 'sticker'
+    ? (Draw.pendingStickerId ? 'キャンバスをタップして配置' : 'スタンプを選択中...')
+    : tool === 'select' ? 'オブジェクトをタップして選択・移動' : '';
+  return `<span style="font-size:12px;color:var(--ink-faint);">${msg}</span>`;
+}
+
+// 選択状態を更新するヘルパー
+function syncActive(container, attr, currentVal) {
+  container.querySelectorAll(`[${attr}]`).forEach(el => {
+    el.classList.toggle('on', el.dataset[attr.replace('data-','')] == currentVal);
+  });
 }
 
 function bindOpts(container) {
-  // pen colors
-  container.querySelectorAll('[data-color]').forEach(el=>{
-    el.addEventListener('click',()=>{ S.penColor=el.dataset.color; container.querySelectorAll('[data-color]').forEach(s=>s.classList.toggle('on',s.dataset.color===S.penColor)); });
-  });
-  // pen sizes
-  container.querySelectorAll('[data-size]').forEach(el=>{
-    el.addEventListener('click',()=>{ S.penSize=+el.dataset.size; container.querySelectorAll('[data-size]').forEach(s=>s.classList.toggle('on',+s.dataset.size===S.penSize)); });
-  });
-  // eraser sizes
-  container.querySelectorAll('[data-esize]').forEach(el=>{
-    el.addEventListener('click',()=>{
-      S.eraserSize=+el.dataset.esize;
-      container.querySelectorAll('[data-esize]').forEach(s=>s.classList.toggle('on',+s.dataset.esize===S.eraserSize));
-      if (S.tool==='eraser') setEraserCursor(); // サイズ変更→カーソル即更新
+  container.querySelectorAll('[data-color]').forEach(el => {
+    el.addEventListener('click', () => {
+      S.penColor = el.dataset.color;
+      syncActive(container, 'data-color', S.penColor);
     });
   });
-  // text colors
-  container.querySelectorAll('[data-tcolor]').forEach(el=>{
-    el.addEventListener('click',()=>{ S.textColor=el.dataset.tcolor; container.querySelectorAll('[data-tcolor]').forEach(s=>s.classList.toggle('on',s.dataset.tcolor===S.textColor)); });
+  container.querySelectorAll('[data-size]').forEach(el => {
+    el.addEventListener('click', () => {
+      S.penSize = +el.dataset.size;
+      syncActive(container, 'data-size', S.penSize);
+    });
   });
-  // text sizes
-  container.querySelectorAll('[data-tsize]').forEach(el=>{
-    el.addEventListener('click',()=>{
-      S.textSize=+el.dataset.tsize;
-      container.querySelectorAll('[data-tsize]').forEach(s=>s.classList.toggle('on',+s.dataset.tsize===S.textSize));
+  container.querySelectorAll('[data-esize]').forEach(el => {
+    el.addEventListener('click', () => {
+      S.eraserSize = +el.dataset.esize;
+      syncActive(container, 'data-esize', S.eraserSize);
+      if (S.tool === 'eraser') setEraserCursor();
+    });
+  });
+  container.querySelectorAll('[data-tcolor]').forEach(el => {
+    el.addEventListener('click', () => {
+      S.textColor = el.dataset.tcolor;
+      syncActive(container, 'data-tcolor', S.textColor);
+    });
+  });
+  container.querySelectorAll('[data-tsize]').forEach(el => {
+    el.addEventListener('click', () => {
+      S.textSize = +el.dataset.tsize;
+      syncActive(container, 'data-tsize', S.textSize);
     });
   });
 }
 
 function renderOpts() {
   const html = buildOptsHTML(S.tool);
-  // Portrait row3
+  // 縦長: Row3
   const p = document.getElementById('tb-opts-portrait');
   p.innerHTML = html;
   bindOpts(p);
-  // Landscape
+  // 横長: サイドパネル（opt-blockを縦並びに）
   const l = document.getElementById('land-opts');
-  l.innerHTML = `<div style="display:flex;flex-direction:column;gap:8px;">${html.replace(/class="opt-block"/g,'class="opt-block" style="flex-direction:column;align-items:flex-start;"')}</div>`;
+  l.innerHTML = `<div style="display:flex;flex-direction:column;gap:8px;">
+    ${html.replace(/class="opt-block"/g, 'class="opt-block" style="flex-direction:column;align-items:flex-start;"')}
+  </div>`;
   bindOpts(l);
 }
 
@@ -2936,7 +3160,7 @@ document.getElementById('btn-user-mgmt').addEventListener('click', () => {
   alert('ユーザー管理機能は今後実装予定です');
 });
 
-/* ── グループ追加（将来実装のプレースホルダー）── */
+// ── グループ追加（将来実装のプレースホルダー） ──
 document.getElementById('btn-add-group').addEventListener('click', () => {
   // TODO: グループ追加ダイアログを実装
   alert('グループ追加機能は今後実装予定です');
