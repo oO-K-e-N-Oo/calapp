@@ -748,7 +748,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v162</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v164</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -1470,14 +1470,34 @@ cvs.addEventListener('pointerdown', e => {
 }, {capture: false, passive: false});
 
 /* ════ POINTER INPUT ════ */
-cvs.addEventListener('pointerdown', e=>{e.preventDefault(); Draw.isPointerDown=true; onDown(e);},{passive:false});
+cvs.addEventListener('pointerdown', e=>{
+  e.preventDefault();
+  Draw.isPointerDown=true;
+  if (S.tool === 'eraser') window._moveEraserCursor && window._moveEraserCursor(e.clientX, e.clientY);
+  if (S.tool === 'eraser') window._showEraserCursor && window._showEraserCursor(Math.max(8, Math.round(S.eraserSize * cvs.getBoundingClientRect().width / CANVAS_SRC)));
+  onDown(e);
+},{passive:false});
 cvs.addEventListener('pointermove', e=>{
   e.preventDefault();
-  window._moveEraserCursor && window._moveEraserCursor(e.clientX, e.clientY);
+  if (S.tool === 'eraser' && Draw.isPointerDown) window._moveEraserCursor && window._moveEraserCursor(e.clientX, e.clientY);
   if(Draw.isPointerDown||Draw.dragInfo) onMove(e);
 },{passive:false});
-cvs.addEventListener('pointerup',   e=>{e.preventDefault(); Draw.isPointerDown=false; onUp(e);},{passive:false});
-cvs.addEventListener('pointercancel',e=>{Draw.isPointerDown=false; Draw.dragInfo=null; Draw.activeStroke=null;});
+cvs.addEventListener('pointerup', e=>{
+  e.preventDefault();
+  Draw.isPointerDown=false;
+  if (S.tool === 'eraser') window._hideEraserCursor && window._hideEraserCursor();
+  cvs.style.cursor = S.tool === 'eraser' ? 'crosshair' : cvs.style.cursor;
+  onUp(e);
+},{passive:false});
+cvs.addEventListener('pointercancel', e=>{
+  Draw.isPointerDown=false;
+  Draw.dragInfo=null;
+  Draw.activeStroke=null;
+  window._hideEraserCursor && window._hideEraserCursor();
+});
+cvs.addEventListener('pointerleave', e=>{
+  if (S.tool === 'eraser') window._hideEraserCursor && window._hideEraserCursor();
+});
 cvs.addEventListener('dblclick', e=>{
   if (S.tool!=='select'||!Draw.selId) return;
   const obj=Draw.objects.find(o=>o.id===Draw.selId);
@@ -1964,6 +1984,9 @@ function goBack(){
   Draw.undoStk=[]; Draw.redoStk=[];
   S.clipboard=null;
 
+  // 消しゴムカーソルを非表示に
+  window._hideEraserCursor && window._hideEraserCursor();
+
   // データ保存
   if (S.currentKey) {
     getActiveCalendar().cellData[S.currentKey] = clone(Draw.objects);
@@ -2257,11 +2280,9 @@ function applyCanvasCursor(tool) {
 })();
 
 function setEraserCursor() {
-  const rect = cvs.getBoundingClientRect();
-  if (!rect.width) { cvs.style.cursor = 'crosshair'; return; }
-  const scale = rect.width / CANVAS_SRC;
-  const diam  = Math.max(8, Math.round(S.eraserSize * scale));
-  window._showEraserCursor(diam);
+  // タッチ中のみ表示するためここでは非表示のまま（pointerdownで表示）
+  window._hideEraserCursor && window._hideEraserCursor();
+  cvs.style.cursor = 'crosshair';
 }
 
 // portrait tool btn clicks
