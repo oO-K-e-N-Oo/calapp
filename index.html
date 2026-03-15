@@ -928,20 +928,7 @@ button:focus-visible { outline: none; background: transparent; }
 "></canvas>
 
 <script>
-// ── デバッグログ（画面下部に表示） ──
-function _log(...args) {
-  let el = document.getElementById('_dbg');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = '_dbg';
-    el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.8);color:#0f0;font:11px monospace;padding:6px;max-height:140px;overflow-y:auto;z-index:9999;pointer-events:none;';
-    document.body.appendChild(el);
-  }
-  const d = document.createElement('div');
-  d.textContent = args.map(x => typeof x === 'object' ? JSON.stringify(x).slice(0,80) : x).join(' ');
-  el.appendChild(d);
-  el.scrollTop = el.scrollHeight;
-}
+
 /* ══════════════════════════════════════════════
    STICKER DEFS
 ══════════════════════════════════════════════ */
@@ -1820,10 +1807,8 @@ function deleteObj(id){
 }
 
 function flushCell(){
-  if (!S.currentKey) { _log('[flush] currentKey is null!'); return; }
-  _log('[flush] key:', S.currentKey, 'objs:', Draw.objects.length);
+  if (!S.currentKey) return;
   getActiveCalendar().cellData[S.currentKey] = clone(Draw.objects);
-  _log('[flush] saved:', getActiveCalendar().cellData[S.currentKey]?.length);
   renderMiniCanvases();
 }
 
@@ -1942,80 +1927,23 @@ function goBack(){
   finalizePenObjs(); finalizeText();
   Draw.undoStk=[]; Draw.redoStk=[];
   S.clipboard=null;
-  flushCell();
 
-  // ── アニメーション開始位置（描画キャンバス） ──
-  const fromRect = cvs.getBoundingClientRect();
+  // cellDataに確実に保存
+  if (S.currentKey) {
+    getActiveCalendar().cellData[S.currentKey] = clone(Draw.objects);
+  }
 
-  // カレンダー画面を先に描画してミニキャンバスの位置を確定
+  // カレンダー画面に切り替え
+  document.getElementById('cal-screen').style.opacity = '1';
   showScreen('calendar');
   renderCalendar();
 
-  // applyCellSizes(rAF) + renderMiniCanvases(20ms) の完了を待って
-  // さらに念押しで再描画する
-  setTimeout(renderMiniCanvases, 100);
+  // transition-canvasが残っていたら非表示に
+  const tc = document.getElementById('transition-canvas');
+  if (tc) { tc.style.display = 'none'; tc.style.transform = 'none'; }
 
-  // ミニキャンバスの rect を取得（アニメーション終了位置）
-  // applyCellSizes は requestAnimationFrame 内なので少し待つ
-  const doAnim = () => {
-    const miniMc = Cal.currentCellKey
-      ? document.querySelector(`.cell-preview canvas[data-key="${Cal.currentCellKey}"]`)
-      : null;
-    const toRect = miniMc ? miniMc.getBoundingClientRect() : null;
-
-    if (!toRect || toRect.width < 2) { renderMiniCanvases(); return; }
-
-    const tc   = document.getElementById('transition-canvas');
-    const ctx2 = tc.getContext('2d');
-    const dpr  = window.devicePixelRatio || 1;
-
-    tc.width  = fromRect.width  * dpr;
-    tc.height = fromRect.height * dpr;
-    ctx2.scale(dpr, dpr);
-
-    // 描画キャンバスの内容をトランジションキャンバスにコピー
-    ctx2.fillStyle = '#fff';
-    ctx2.fillRect(0, 0, fromRect.width, fromRect.height);
-    const sc = fromRect.width / CANVAS_SRC;
-    getCellObjs(Cal.currentCellKey).forEach(o => drawObj(ctx2, o, sc));
-
-    // 開始位置（描画エリアと同じ）
-    Object.assign(tc.style, {
-      display:    'block',
-      left:       fromRect.left + 'px',
-      top:        fromRect.top  + 'px',
-      width:      fromRect.width  + 'px',
-      height:     fromRect.height + 'px',
-      transform:  'none',
-      transition: 'none',
-      opacity:    '1',
-    });
-
-    // カレンダー画面は一時的に透明に
-    document.getElementById('cal-screen').style.opacity = '0';
-
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      const dx = toRect.left - fromRect.left;
-      const dy = toRect.top  - fromRect.top;
-      const sx = toRect.width  / fromRect.width;
-      const sy = toRect.height / fromRect.height;
-
-      tc.style.transition    = 'transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s';
-      tc.style.transformOrigin = '0 0';
-      tc.style.transform     = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
-
-      tc.addEventListener('transitionend', () => {
-        tc.style.display   = 'none';
-        tc.style.transform = 'none';
-        document.getElementById('cal-screen').style.opacity = '1';
-        // アニメーション完了後にミニキャンバスを再描画
-        renderMiniCanvases();
-      }, {once: true});
-    }));
-  };
-
-  // applyCellSizes の rAF + setTimeout(20) が完了するのを待つ
-  setTimeout(doAnim, 60);
+  // applyCellSizes完了後にミニキャンバスを描画
+  setTimeout(renderMiniCanvases, 80);
 }
 document.getElementById('btn-back').addEventListener('click', goBack);
 document.getElementById('btn-back-land').addEventListener('click', goBack);
@@ -2861,11 +2789,13 @@ function moveObjInCell(key, obj, nx, ny) {
 }
 
 function renderMiniCanvases(){
+  let skipCount=0, drawCount=0;
   document.querySelectorAll('.cell-preview canvas').forEach(mc=>{
     const key=mc.dataset.key;
     const par=mc.parentElement;
     const w=par.clientWidth, h=par.clientHeight;
-    if(!w||!h) return;
+    if(!w||!h){ skipCount++; return; }
+    drawCount++;
     mc.width=w; mc.height=h;
     const c2=mc.getContext('2d');
     const sc=Math.min(w/CANVAS_SRC,h/CANVAS_SRC);
@@ -2878,6 +2808,7 @@ function renderMiniCanvases(){
       if (obj) drawMiniBBox(c2,obj,sc);
     }
   });
+  if(skipCount>0||drawCount>0) console.log('[mini] skip:'+skipCount+' draw:'+drawCount);
 }
 
 function drawObjMini(c,obj){
