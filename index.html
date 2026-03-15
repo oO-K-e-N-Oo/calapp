@@ -242,10 +242,13 @@ button:focus-visible { outline: none; background: transparent; }
 
 .cell-top {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  flex-direction: row;
+  gap: 3px;
   padding: 3px 5px 2px;
   flex-shrink: 0;
   height: var(--cell-date-h, 20px);
+  overflow: hidden;
 }
 .cell-num {
   font-size: 11px;
@@ -253,16 +256,13 @@ button:focus-visible { outline: none; background: transparent; }
   color: var(--ink-mid);
   line-height: 1;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  flex-shrink: 0;
 }
 .cal-cell.today .cell-num { font-weight: 700; color: var(--ink); }
 .cell-hol-name {
-  font-size: 7.5px;
+  font-size: 11px;
   color: var(--hol-txt);
-  margin-left: 3px;
   line-height: 1;
-  margin-top: 1px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -277,15 +277,20 @@ button:focus-visible { outline: none; background: transparent; }
 }
 .cal-cell.landscape-cell .cell-top {
   flex-direction: column;
-  justify-content: flex-start;
   align-items: flex-start;
+  justify-content: flex-start;
   padding: 4px 6px;
   overflow: hidden;
+  height: auto;
 }
 .cal-cell.landscape-cell .cell-num {
   font-size: 9px;
-  white-space: nowrap;
   overflow: visible;
+}
+.cal-cell.landscape-cell .cell-hol-name {
+  font-size: 9px;
+  overflow: visible;
+  white-space: nowrap;
 }
 .cell-remaining {
   flex: 1;
@@ -740,7 +745,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v142</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v145</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -2169,7 +2174,7 @@ document.querySelectorAll('.land-tool-btn').forEach(btn=>{
 
 // 日付エリアの固定サイズ
 const DATE_H  = 20;  // 縦長: 上部日付エリア高さ(px)
-const DATE_W  = 28;  // 横長: 左側日付エリア幅(px)
+const DATE_W  = 40;  // 横長: 左側日付エリア幅(px)
 
 function isLandscapeCalendar() {
   return window.innerWidth > window.innerHeight;
