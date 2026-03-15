@@ -159,8 +159,12 @@ body{font-family:var(--font-body);color:var(--ink);}
   cursor:pointer;border-radius:var(--r);color:var(--ink);
   display:flex;align-items:center;justify-content:center;
   transition:background .15s;flex-shrink:0;
+  outline:none;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-appearance:none;
 }
 .icon-btn:hover{background:var(--tool-hover);}
+.icon-btn:focus, .icon-btn:active{outline:none;}
 .icon-btn svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 
 .cal-weekdays{
@@ -285,9 +289,11 @@ body{font-family:var(--font-body);color:var(--ink);}
 
 /* row 1: back + date + undo */
 .tb-row1{
-  display:flex;align-items:center;gap:0;
+  display:flex;align-items:flex-end;gap:0;
   padding:10px 16px 8px;flex-shrink:0;
 }
+#btn-back{ align-self:center; }
+.day-badge-inline{ align-self:center; }
 .day-badge-inline{
   display:flex; flex-direction:column; gap:1px;
 }
@@ -298,7 +304,7 @@ body{font-family:var(--font-body);color:var(--ink);}
 .day-dow{font-size:14px;color:var(--ink-faint);font-weight:400;}
 .day-sub{font-size:11px;color:var(--ink-faint);font-weight:300;}
 .spacer{flex:1;}
-.ur-row{display:flex;gap:6px;padding-right:8px;}
+.ur-row{display:flex;gap:6px;padding-right:8px;align-self:flex-end;padding-bottom:2px;margin-left:16px;}
 .ur-btn{
   background:none;border:1px solid var(--border);border-radius:var(--r);
   cursor:pointer;padding:6px 14px;font-size:16px;
@@ -367,7 +373,9 @@ body{font-family:var(--font-body);color:var(--ink);}
 #day-screen.landscape .day-sidebar-land{display:flex;}
 
 /* landscape tool layout */
-.land-row1{display:flex;align-items:center;gap:0;flex-wrap:nowrap;margin-left:-12px;}
+.land-row1{display:flex;align-items:flex-end;gap:0;flex-wrap:nowrap;margin-left:-12px;}
+#btn-back-land{ align-self:center; }
+.land-badge{ align-self:center; }
 .land-badge{display:flex;flex-direction:column;gap:2px;}
 .land-date-row{display:flex;align-items:baseline;gap:6px;white-space:nowrap;}
 .land-day-num{font-family:var(--font-disp);font-size:38px;color:var(--ink-faint);line-height:1;white-space:nowrap;}
@@ -381,6 +389,12 @@ body{font-family:var(--font-body);color:var(--ink);}
   margin-left:-10px;
   background:transparent;
   -webkit-appearance:none;
+  outline:none;
+  -webkit-tap-highlight-color:transparent;
+}
+#btn-back:focus, #btn-back:active{
+  background:transparent;
+  outline:none;
 }
 #btn-back svg{
   width:40px; height:40px;
