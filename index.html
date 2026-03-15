@@ -748,7 +748,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v164</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v165</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -3253,38 +3253,57 @@ document.getElementById('cal-tabs').addEventListener('click', e => {
 });
 
 // タブ名ダブルクリックでインライン編集
-document.getElementById('cal-tabs').addEventListener('dblclick', e => {
-  const tab = e.target.closest('.cal-tab');
-  if (!tab) return;
-  if (tab.querySelector('.cal-tab-input')) return;
+// タブ長押しで名前編集
+(function() {
+  let longPressTimer = null;
 
-  const cal = calendars.find(c => c.id === tab.dataset.calId);
-  if (!cal) return;
-  const currentName = cal.name;
-  tab.textContent = '';
+  function startTabEdit(tab) {
+    if (tab.querySelector('.cal-tab-input')) return;
+    const cal = calendars.find(c => c.id === tab.dataset.calId);
+    if (!cal) return;
+    const currentName = cal.name;
+    tab.textContent = '';
 
-  const input = document.createElement('input');
-  input.className = 'cal-tab-input';
-  input.value = currentName;
-  input.style.width = Math.max(currentName.length * 9, 60) + 'px';
-  tab.appendChild(input);
-  input.focus();
-  input.select();
+    const input = document.createElement('input');
+    input.className = 'cal-tab-input';
+    input.value = currentName;
+    input.style.width = Math.max(currentName.length * 9, 60) + 'px';
+    tab.appendChild(input);
+    input.focus();
+    input.select();
 
-  const commit = () => {
-    const newName = input.value.trim() || currentName;
-    cal.name = newName;
-    renderTabs();
-  };
-  input.addEventListener('blur', commit, { once: true });
-  input.addEventListener('keydown', ev => {
-    if (ev.key === 'Enter')  { ev.preventDefault(); input.blur(); }
-    if (ev.key === 'Escape') { input.value = currentName; input.blur(); }
-    requestAnimationFrame(() => {
-      input.style.width = Math.max(input.value.length * 9, 60) + 'px';
+    const commit = () => {
+      const newName = input.value.trim() || currentName;
+      cal.name = newName;
+      renderTabs();
+    };
+    input.addEventListener('blur', commit, { once: true });
+    input.addEventListener('keydown', ev => {
+      if (ev.key === 'Enter')  { ev.preventDefault(); input.blur(); }
+      if (ev.key === 'Escape') { input.value = currentName; input.blur(); }
+      requestAnimationFrame(() => {
+        input.style.width = Math.max(input.value.length * 9, 60) + 'px';
+      });
     });
+  }
+
+  document.getElementById('cal-tabs').addEventListener('pointerdown', e => {
+    const tab = e.target.closest('.cal-tab');
+    if (!tab) return;
+    longPressTimer = setTimeout(() => {
+      longPressTimer = null;
+      startTabEdit(tab);
+    }, 500);
   });
-});
+
+  document.getElementById('cal-tabs').addEventListener('pointerup', () => {
+    if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+  });
+
+  document.getElementById('cal-tabs').addEventListener('pointermove', () => {
+    if (longPressTimer) { clearTimeout(longPressTimer); longPressTimer = null; }
+  });
+})();
 
 /* ════ CALENDAR NAV ════ */
 document.getElementById('btn-prev').addEventListener('click',()=>{
