@@ -936,6 +936,19 @@ button:focus-visible { outline: none; background: transparent; }
 "></canvas>
 
 <script>
+function _showLog(msg) {
+  let el = document.getElementById('_dbg2');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = '_dbg2';
+    el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.85);color:#ff0;font:11px monospace;padding:6px;max-height:120px;overflow:auto;z-index:9999;pointer-events:none;';
+    document.body.appendChild(el);
+  }
+  const d = document.createElement('div');
+  d.textContent = msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
 
 /* ══════════════════════════════════════════════
    STICKER DEFS
@@ -1956,7 +1969,6 @@ function goBack(){
     const miniMc = Cal.currentCellKey
       ? document.querySelector(`.cell-preview canvas[data-key="${Cal.currentCellKey}"]`)
       : null;
-    // cell-previewコンテナの位置を使う（canvasより確実）
     const previewEl = miniMc ? miniMc.parentElement : null;
     const toRect = previewEl ? previewEl.getBoundingClientRect() : null;
 
@@ -1965,6 +1977,10 @@ function goBack(){
       renderMiniCanvases();
       return;
     }
+
+    // デバッグ: fromとtoの位置をログ
+    _showLog('from: x='+Math.round(fromRect.left)+' y='+Math.round(fromRect.top)+' w='+Math.round(fromRect.width)+' h='+Math.round(fromRect.height));
+    _showLog('to:   x='+Math.round(toRect.left)+' y='+Math.round(toRect.top)+' w='+Math.round(toRect.width)+' h='+Math.round(toRect.height));
 
     const ctx2 = tc.getContext('2d');
     const dpr  = window.devicePixelRatio || 1;
