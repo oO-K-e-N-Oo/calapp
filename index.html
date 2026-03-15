@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="手書きカレンダー">
@@ -56,6 +56,7 @@
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 html, body {
   height: 100%;
@@ -736,7 +737,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v130</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v132</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -1934,22 +1935,86 @@ function goBack(){
   Draw.undoStk=[]; Draw.redoStk=[];
   S.clipboard=null;
 
-  // cellDataに確実に保存
+  // データ保存
   if (S.currentKey) {
     getActiveCalendar().cellData[S.currentKey] = clone(Draw.objects);
   }
+
+  // アニメーション開始位置（日付セル画面のキャンバス）を先に取得
+  const fromRect = cvs.getBoundingClientRect();
 
   // カレンダー画面に切り替え
   document.getElementById('cal-screen').style.opacity = '1';
   showScreen('calendar');
   renderCalendar();
 
-  // transition-canvasが残っていたら非表示に
+  // transition-canvasのリセット
   const tc = document.getElementById('transition-canvas');
   if (tc) { tc.style.display = 'none'; tc.style.transform = 'none'; }
 
-  // applyCellSizes完了後にミニキャンバスを描画
-  setTimeout(renderMiniCanvases, 80);
+  const doAnim = () => {
+    const miniMc = Cal.currentCellKey
+      ? document.querySelector(`.cell-preview canvas[data-key="${Cal.currentCellKey}"]`)
+      : null;
+    const toRect = miniMc ? miniMc.getBoundingClientRect() : null;
+
+    // アニメーション不可の場合はそのまま描画だけ
+    if (!fromRect || fromRect.width < 2 || !toRect || toRect.width < 2) {
+      renderMiniCanvases();
+      return;
+    }
+
+    const ctx2 = tc.getContext('2d');
+    const dpr  = window.devicePixelRatio || 1;
+    tc.width   = fromRect.width  * dpr;
+    tc.height  = fromRect.height * dpr;
+    ctx2.scale(dpr, dpr);
+    ctx2.fillStyle = '#fff';
+    ctx2.fillRect(0, 0, fromRect.width, fromRect.height);
+    const sc = fromRect.width / CANVAS_SRC;
+    getCellObjs(Cal.currentCellKey).forEach(o => drawObj(ctx2, o, sc));
+
+    Object.assign(tc.style, {
+      display:         'block',
+      left:            fromRect.left   + 'px',
+      top:             fromRect.top    + 'px',
+      width:           fromRect.width  + 'px',
+      height:          fromRect.height + 'px',
+      transform:       'none',
+      transition:      'none',
+      opacity:         '1',
+    });
+
+    // カレンダー画面を一時的に透明に
+    document.getElementById('cal-screen').style.opacity = '0';
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      const dx = toRect.left - fromRect.left;
+      const dy = toRect.top  - fromRect.top;
+      const sx = toRect.width  / fromRect.width;
+      const sy = toRect.height / fromRect.height;
+
+      tc.style.transition      = 'transform 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.4s';
+      tc.style.transformOrigin = '0 0';
+      tc.style.transform       = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+
+      const finish = () => {
+        tc.style.display   = 'none';
+        tc.style.transform = 'none';
+        document.getElementById('cal-screen').style.opacity = '1';
+        renderMiniCanvases();
+      };
+
+      // フォールバック（transitionendが発火しない場合）
+      const fallback = setTimeout(finish, 600);
+      tc.addEventListener('transitionend', () => {
+        clearTimeout(fallback);
+        finish();
+      }, { once: true });
+    }));
+  };
+
+  setTimeout(doAnim, 60);
 }
 document.getElementById('btn-back').addEventListener('click', goBack);
 document.getElementById('btn-back-land').addEventListener('click', goBack);
