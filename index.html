@@ -285,7 +285,7 @@ body{font-family:var(--font-body);color:var(--ink);}
 
 /* row 1: back + date + undo */
 .tb-row1{
-  display:flex;align-items:center;gap:4px;
+  display:flex;align-items:center;gap:0;
   padding:10px 16px 8px;flex-shrink:0;
 }
 .day-badge-inline{
@@ -367,7 +367,7 @@ body{font-family:var(--font-body);color:var(--ink);}
 #day-screen.landscape .day-sidebar-land{display:flex;}
 
 /* landscape tool layout */
-.land-row1{display:flex;align-items:center;gap:2px;flex-wrap:nowrap;margin-left:-12px;}
+.land-row1{display:flex;align-items:center;gap:0;flex-wrap:nowrap;margin-left:-12px;}
 .land-badge{display:flex;flex-direction:column;gap:2px;}
 .land-date-row{display:flex;align-items:baseline;gap:6px;white-space:nowrap;}
 .land-day-num{font-family:var(--font-disp);font-size:38px;color:var(--ink-faint);line-height:1;white-space:nowrap;}
@@ -1668,7 +1668,7 @@ function openDayCell(key, label) {
   document.getElementById('day-sub-p').textContent = `${S.year}年 ${S.month+1}月`;
   document.getElementById('day-sub-l').textContent = `${S.year}年 ${S.month+1}月`;
 
-  const DOW_JA = ['（日）','（月）','（火）','（水）','（木）','（金）','（土）'];
+  const DOW_JA = ['日','月','火','水','木','金','土'];
   const dowStr = (typeof label === 'number')
     ? DOW_JA[new Date(S.year, S.month, label).getDay()]
     : '';
