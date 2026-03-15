@@ -1924,6 +1924,7 @@ function openDayCell(key, label) {
 }
 
 function goBack(){
+  _showLog('goBack called, key:' + S.currentKey + ' objs:' + Draw.objects.length);
   finalizePenObjs(); finalizeText();
   Draw.undoStk=[]; Draw.redoStk=[];
   S.clipboard=null;
@@ -2789,13 +2790,11 @@ function moveObjInCell(key, obj, nx, ny) {
 }
 
 function renderMiniCanvases(){
-  let skipCount=0, drawCount=0;
   document.querySelectorAll('.cell-preview canvas').forEach(mc=>{
     const key=mc.dataset.key;
     const par=mc.parentElement;
     const w=par.clientWidth, h=par.clientHeight;
-    if(!w||!h){ skipCount++; return; }
-    drawCount++;
+    if(!w||!h) return;
     mc.width=w; mc.height=h;
     const c2=mc.getContext('2d');
     const sc=Math.min(w/CANVAS_SRC,h/CANVAS_SRC);
@@ -2808,7 +2807,6 @@ function renderMiniCanvases(){
       if (obj) drawMiniBBox(c2,obj,sc);
     }
   });
-  if(skipCount>0||drawCount>0) console.log('[mini] skip:'+skipCount+' draw:'+drawCount);
 }
 
 function drawObjMini(c,obj){
