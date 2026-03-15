@@ -737,7 +737,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v141</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v144-debug</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -936,6 +936,19 @@ button:focus-visible { outline: none; background: transparent; }
 "></canvas>
 
 <script>
+function _showLog(msg) {
+  let el = document.getElementById('_dbg2');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = '_dbg2';
+    el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,.85);color:#ff0;font:11px monospace;padding:6px;max-height:150px;overflow:auto;z-index:9999;pointer-events:none;';
+    document.body.appendChild(el);
+  }
+  const d = document.createElement('div');
+  d.textContent = msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
 
 /* ══════════════════════════════════════════════
    STICKER DEFS
@@ -2811,7 +2824,9 @@ function renderMiniCanvases(){
     const c2=mc.getContext('2d');
     const sc=Math.min(w/CANVAS_SRC,h/CANVAS_SRC);
     c2.save(); c2.scale(sc,sc);
-    getCellObjs(key).forEach(o=>drawObjMini(c2,o));
+    const _objs2=getCellObjs(key);
+    if(_objs2.length>0) _showLog('KEY='+key+' w='+w+' h='+h+' sc='+sc.toFixed(4)+' objs='+_objs2.length);
+    _objs2.forEach(o=>drawObjMini(c2,o));
     c2.restore();
     // 選択中オブジェクトのバウンディングボックスを描画
     if (Cal.selCellKey===key && Cal.selObjId) {
