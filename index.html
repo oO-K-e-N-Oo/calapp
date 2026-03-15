@@ -748,7 +748,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v160</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v162</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -1471,7 +1471,11 @@ cvs.addEventListener('pointerdown', e => {
 
 /* ════ POINTER INPUT ════ */
 cvs.addEventListener('pointerdown', e=>{e.preventDefault(); Draw.isPointerDown=true; onDown(e);},{passive:false});
-cvs.addEventListener('pointermove', e=>{e.preventDefault(); if(Draw.isPointerDown||Draw.dragInfo) onMove(e);},{passive:false});
+cvs.addEventListener('pointermove', e=>{
+  e.preventDefault();
+  window._moveEraserCursor && window._moveEraserCursor(e.clientX, e.clientY);
+  if(Draw.isPointerDown||Draw.dragInfo) onMove(e);
+},{passive:false});
 cvs.addEventListener('pointerup',   e=>{e.preventDefault(); Draw.isPointerDown=false; onUp(e);},{passive:false});
 cvs.addEventListener('pointercancel',e=>{Draw.isPointerDown=false; Draw.dragInfo=null; Draw.activeStroke=null;});
 cvs.addEventListener('dblclick', e=>{
@@ -2198,43 +2202,66 @@ function switchTool(tool) {
 function applyCanvasCursor(tool) {
   if (tool === 'eraser') {
     setEraserCursor();
-  } else if (tool === 'select') {
-    cvs.style.cursor = 'default';
-  } else if (tool === 'sticker') {
-    // スタンプ選択済みなら copy、未選択なら default（モーダルが前面に出る）
-    cvs.style.cursor = Draw.pendingStickerId ? 'copy' : 'default';
   } else {
-    cvs.style.cursor = 'crosshair';
+    window._hideEraserCursor && window._hideEraserCursor();
+    if (tool === 'select') {
+      cvs.style.cursor = 'default';
+    } else if (tool === 'sticker') {
+      cvs.style.cursor = Draw.pendingStickerId ? 'copy' : 'default';
+    } else {
+      cvs.style.cursor = 'crosshair';
+    }
   }
 }
 
+/* ── 消しゴムカーソル（DOM要素追従方式・Safari対応） ── */
+(function() {
+  let eraserEl = null;
+
+  function getOrCreateEraserEl() {
+    if (!eraserEl) {
+      eraserEl = document.createElement('div');
+      eraserEl.id = '_eraser-cursor';
+      eraserEl.style.cssText = `
+        position: fixed; pointer-events: none; z-index: 9998;
+        border-radius: 50%;
+        border: 1.5px solid rgba(0,0,0,0.6);
+        box-shadow: 0 0 0 1px rgba(255,255,255,0.8);
+        transform: translate(-50%, -50%);
+        display: none;
+      `;
+      document.body.appendChild(eraserEl);
+    }
+    return eraserEl;
+  }
+
+  window._showEraserCursor = function(size) {
+    const el = getOrCreateEraserEl();
+    el.style.width  = size + 'px';
+    el.style.height = size + 'px';
+    el.style.display = 'block';
+    cvs.style.cursor = 'none';
+  };
+
+  window._hideEraserCursor = function() {
+    if (eraserEl) eraserEl.style.display = 'none';
+    cvs.style.cursor = 'crosshair';
+  };
+
+  window._moveEraserCursor = function(x, y) {
+    if (eraserEl && eraserEl.style.display !== 'none') {
+      eraserEl.style.left = x + 'px';
+      eraserEl.style.top  = y + 'px';
+    }
+  };
+})();
+
 function setEraserCursor() {
-  const rect  = cvs.getBoundingClientRect();
-  // キャンバスがまだ画面に出ていない場合はデフォルトに留める
+  const rect = cvs.getBoundingClientRect();
   if (!rect.width) { cvs.style.cursor = 'crosshair'; return; }
-
-  const scale  = rect.width / CANVAS_SRC;
-  const diam   = Math.max(8, Math.round(S.eraserSize * scale));
-  const r      = diam / 2;
-  const pad    = 2;
-  const svgW   = diam + pad * 2;
-  const cx     = r + pad;
-  const cy     = r + pad;
-
-  const svg = [
-    `<svg xmlns='http://www.w3.org/2000/svg' width='${svgW}' height='${svgW}'>`,
-    // 白い外縁（視認性）
-    `<circle cx='${cx}' cy='${cy}' r='${r}' fill='none' stroke='white' stroke-width='2.5'/>`,
-    // 黒い線
-    `<circle cx='${cx}' cy='${cy}' r='${r}' fill='none' stroke='black' stroke-width='1.5'/>`,
-    // 中心の十字
-    `<line x1='${cx}' y1='${cy-3}' x2='${cx}' y2='${cy+3}' stroke='black' stroke-width='1.2'/>`,
-    `<line x1='${cx-3}' y1='${cy}' x2='${cx+3}' y2='${cy}' stroke='black' stroke-width='1.2'/>`,
-    `</svg>`
-  ].join('');
-
-  const encoded = encodeURIComponent(svg);
-  cvs.style.cursor = `url("data:image/svg+xml,${encoded}") ${cx} ${cy}, crosshair`;
+  const scale = rect.width / CANVAS_SRC;
+  const diam  = Math.max(8, Math.round(S.eraserSize * scale));
+  window._showEraserCursor(diam);
 }
 
 // portrait tool btn clicks
@@ -2670,29 +2697,25 @@ function startCalDrag(e, srcKey, obj) {
   e.preventDefault();
   calDragInfo = {objId: obj.id, srcKey, origObj: clone(obj)};
 
-  // ゴースト生成: ミニキャンバスにオブジェクト1つだけ描いたcanvasをbody直下に配置
-  const ghostSize = 80;
+  // ミニキャンバスの実サイズを取得してゴーストのサイズとする
+  const miniMc = document.querySelector(`.cell-preview canvas[data-key="${srcKey}"]`);
+  const miniRect = miniMc ? miniMc.getBoundingClientRect() : null;
+  const ghostSize = miniRect ? Math.round(miniRect.width) : 80;
+
   const ghost = document.createElement('canvas');
   ghost.width  = ghostSize;
   ghost.height = ghostSize;
   ghost.style.cssText = `position:fixed;pointer-events:none;z-index:9999;
+    width:${ghostSize}px;height:${ghostSize}px;
     opacity:0.75;transform:translate(-50%,-50%);transition:none;`;
   const gc = ghost.getContext('2d');
   const sc = ghostSize / CANVAS_SRC;
 
-  // ゴーストにオブジェクトを中央描画
-  const fakeObj = clone(obj);
-  fakeObj.x = CANVAS_SRC / 2;
-  fakeObj.y = CANVAS_SRC / 2;
-  if (fakeObj.type === 'pen') {
-    // penは重心を中央に移動
-    let cx=0, cy=0, n=0;
-    fakeObj.paths.forEach(p=>p.points.forEach(pt=>{cx+=pt.x;cy+=pt.y;n++;}));
-    if(n>0){cx/=n;cy/=n;}
-    const dx=CANVAS_SRC/2-cx, dy=CANVAS_SRC/2-cy;
-    fakeObj.paths = fakeObj.paths.map(p=>({...p, points:p.points.map(pt=>({x:pt.x+dx,y:pt.y+dy}))}));
-  }
-  drawObj(gc, fakeObj, sc);
+  // ゴーストにオブジェクトをミニキャンバスと同じスケールで描画
+  gc.save();
+  gc.scale(sc, sc);
+  drawObjMini(gc, obj);
+  gc.restore();
 
   ghost.style.left = e.clientX + 'px';
   ghost.style.top  = e.clientY + 'px';
