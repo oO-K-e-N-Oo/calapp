@@ -751,7 +751,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v172</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v173</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -3349,9 +3349,9 @@ function triggerCalFadeIn() {
 
     // 縦移動が横移動より大きければ無視
     if (Math.abs(dy) > Math.abs(dx)) return;
-    // 距離・速度の閾値
-    if (Math.abs(dx) < 40) return;
-    if (Math.abs(dx) / dt < 0.3) return;
+    // 距離・速度の閾値（iPhoneでも反応するよう緩め）
+    if (Math.abs(dx) < 30) return;
+    if (Math.abs(dx) / dt < 0.2) return;
 
     if (dx < 0) {
       if(++S.month>11){S.month=0;S.year++;} renderCalendar();
@@ -3390,6 +3390,12 @@ function updateOrientation(){
 window.addEventListener('resize',()=>{
   if(S.screen==='day'){updateOrientation();sizeCanvas();}
   if(S.screen==='calendar') renderCalendar();
+});
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => {
+    if(S.screen==='day'){updateOrientation();sizeCanvas();}
+    if(S.screen==='calendar') renderCalendar();
+  }, 100);
 });
 
 /* ════ INIT ════ */
