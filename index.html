@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Calapp">
@@ -751,7 +751,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v173</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v174</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -3320,36 +3320,29 @@ function triggerCalFadeIn() {
   }));
 }
 
-// カレンダーグリッドのフリックで月切り替え
+// カレンダーグリッドのフリックで月切り替え（touch events使用）
 (function() {
   let startX = 0, startY = 0, startT = 0;
-  let tracking = false;
+  const area = document.getElementById('cal-grid-area');
 
-  document.addEventListener('pointerdown', e => {
-    // カレンダー画面以外は無効
-    if (S.screen !== 'calendar') return;
-    // cal-grid-area 内のみ
-    if (!e.target.closest('#cal-grid-area')) return;
-    startX = e.clientX;
-    startY = e.clientY;
+  area.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
     startT = Date.now();
-    tracking = true;
   }, { passive: true });
 
-  document.addEventListener('pointerup', e => {
-    if (!tracking) return;
-    tracking = false;
-    if (S.screen !== 'calendar') return;
-    // オブジェクトドラッグ中は無効
+  area.addEventListener('touchend', e => {
+    if (e.changedTouches.length !== 1) return;
     if (calDragInfo) return;
 
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = e.changedTouches[0].clientY - startY;
     const dt = Math.max(1, Date.now() - startT);
 
     // 縦移動が横移動より大きければ無視
     if (Math.abs(dy) > Math.abs(dx)) return;
-    // 距離・速度の閾値（iPhoneでも反応するよう緩め）
+    // 距離・速度の閾値
     if (Math.abs(dx) < 30) return;
     if (Math.abs(dx) / dt < 0.2) return;
 
@@ -3359,8 +3352,6 @@ function triggerCalFadeIn() {
       if(--S.month<0){S.month=11;S.year--;} renderCalendar();
     }
   }, { passive: true });
-
-  document.addEventListener('pointercancel', () => { tracking = false; }, { passive: true });
 })();
 
 document.getElementById('btn-prev').addEventListener('click', e => {
