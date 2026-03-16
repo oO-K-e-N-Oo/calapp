@@ -751,7 +751,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v171</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v172</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -3322,46 +3322,45 @@ function triggerCalFadeIn() {
 
 // カレンダーグリッドのフリックで月切り替え
 (function() {
-  const area = document.getElementById('cal-grid-area');
   let startX = 0, startY = 0, startT = 0;
   let tracking = false;
 
-  area.addEventListener('pointerdown', e => {
-    // オブジェクトドラッグ中は無効
-    if (calDragInfo) return;
-    // ボタン・メニュー上は無効
-    if (e.target.closest('.ctx-menu')) return;
+  document.addEventListener('pointerdown', e => {
+    // カレンダー画面以外は無効
+    if (S.screen !== 'calendar') return;
+    // cal-grid-area 内のみ
+    if (!e.target.closest('#cal-grid-area')) return;
     startX = e.clientX;
     startY = e.clientY;
     startT = Date.now();
     tracking = true;
   }, { passive: true });
 
-  area.addEventListener('pointerup', e => {
+  document.addEventListener('pointerup', e => {
     if (!tracking) return;
     tracking = false;
+    if (S.screen !== 'calendar') return;
+    // オブジェクトドラッグ中は無効
     if (calDragInfo) return;
 
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
-    const dt = Date.now() - startT;
+    const dt = Math.max(1, Date.now() - startT);
 
-    // 縦移動が横移動より大きければスクロールとみなす
+    // 縦移動が横移動より大きければ無視
     if (Math.abs(dy) > Math.abs(dx)) return;
     // 距離・速度の閾値
     if (Math.abs(dx) < 40) return;
     if (Math.abs(dx) / dt < 0.3) return;
 
     if (dx < 0) {
-      // 左フリック → 翌月
       if(++S.month>11){S.month=0;S.year++;} renderCalendar();
     } else {
-      // 右フリック → 前月
       if(--S.month<0){S.month=11;S.year--;} renderCalendar();
     }
   }, { passive: true });
 
-  area.addEventListener('pointercancel', () => { tracking = false; }, { passive: true });
+  document.addEventListener('pointercancel', () => { tracking = false; }, { passive: true });
 })();
 
 document.getElementById('btn-prev').addEventListener('click', e => {
