@@ -751,7 +751,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v175</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v176</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -2304,6 +2304,10 @@ const DATE_H  = 20;  // 縦長: 上部日付エリア高さ(px)
 const DATE_W  = 56;  // 横長: 左側日付エリア幅(px)
 
 function isLandscapeCalendar() {
+  // iPhoneのSafariではvisualViewportが正確
+  if (window.visualViewport) {
+    return window.visualViewport.width > window.visualViewport.height;
+  }
   return window.innerWidth > window.innerHeight;
 }
 
@@ -3371,7 +3375,9 @@ function showScreen(name){
 
 function updateOrientation(){
   const ds=document.getElementById('day-screen');
-  const lnd=window.innerWidth>window.innerHeight;
+  const lnd = window.visualViewport
+    ? window.visualViewport.width > window.visualViewport.height
+    : window.innerWidth > window.innerHeight;
   ds.classList.toggle('landscape',lnd);
   ds.classList.toggle('portrait',!lnd);
 }
