@@ -312,6 +312,16 @@ button:focus-visible { outline: none; background: transparent; }
 @keyframes cal-fadein { from { opacity: 0; } to { opacity: 1; } }
 .cal-grid-area.tab-switching { animation: cal-fadein 0.4s ease forwards; }
 
+/* 月切り替えスライドアニメーション */
+@keyframes slide-in-from-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes slide-in-from-left  { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes slide-out-to-left   { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+@keyframes slide-out-to-right  { from { transform: translateX(0); } to { transform: translateX(100%); } }
+.cal-grid.slide-in-right  { animation: slide-in-from-right 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+.cal-grid.slide-in-left   { animation: slide-in-from-left  0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+.cal-grid.slide-out-left  { animation: slide-out-to-left   0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+.cal-grid.slide-out-right { animation: slide-out-to-right  0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+
 /* ════════════════════════════════════════════
    DAY CELL SCREEN — 共通
 ════════════════════════════════════════════ */
@@ -751,7 +761,7 @@ button:focus-visible { outline: none; background: transparent; }
       <button class="icon-btn" id="btn-settings">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       </button>
-      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v176</span>
+      <span style="font-size:9px;color:var(--ink-faint);opacity:.5;padding-left:2px;">v177</span>
     </div>
   </div>
   <div class="cal-weekdays" id="cal-wd"></div>
@@ -3324,6 +3334,47 @@ function triggerCalFadeIn() {
   }));
 }
 
+// 月切り替えスライドアニメーション
+// dir: 'next'(翌月・右から入場) or 'prev'(前月・左から入場)
+function navigateMonth(dir) {
+  if (dir === 'next') {
+    if(++S.month>11){S.month=0;S.year++;}
+  } else {
+    if(--S.month<0){S.month=11;S.year--;}
+  }
+
+  const area = document.getElementById('cal-grid-area');
+  const oldGrid = document.getElementById('cal-grid');
+
+  // 旧グリッドをクローンして絶対位置で重ねる
+  const clone = oldGrid.cloneNode(true);
+  clone.id = 'cal-grid-old';
+  clone.style.cssText = `position:absolute;top:0;left:0;width:${oldGrid.offsetWidth}px;pointer-events:none;`;
+  area.appendChild(clone);
+
+  // 新グリッドをレンダリング
+  renderCalendar();
+
+  // アニメーションクラスを付与
+  const inClass  = dir === 'next' ? 'slide-in-right' : 'slide-in-left';
+  const outClass = dir === 'next' ? 'slide-out-left' : 'slide-out-right';
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    oldGrid.classList.add(outClass);
+    clone.classList.add(outClass);
+    const newGrid = document.getElementById('cal-grid');
+    newGrid.classList.add(inClass);
+
+    const cleanup = () => {
+      clone.remove();
+      newGrid.classList.remove(inClass);
+      oldGrid.classList.remove(outClass);
+    };
+    newGrid.addEventListener('animationend', cleanup, { once: true });
+    setTimeout(cleanup, 500); // フォールバック
+  }));
+}
+
 // カレンダーグリッドのフリックで月切り替え（touch events使用）
 (function() {
   let startX = 0, startY = 0, startT = 0;
@@ -3349,19 +3400,19 @@ function triggerCalFadeIn() {
     if (Math.abs(dx) / dt < 0.2) return;
 
     if (dx < 0) {
-      if(++S.month>11){S.month=0;S.year++;} renderCalendar();
+      navigateMonth('next');
     } else {
-      if(--S.month<0){S.month=11;S.year--;} renderCalendar();
+      navigateMonth('prev');
     }
   }, { passive: true });
 })();
 
 document.getElementById('btn-prev').addEventListener('click', e => {
-  if(--S.month<0){S.month=11;S.year--;} renderCalendar();
+  navigateMonth('prev');
   e.currentTarget.blur();
 });
 document.getElementById('btn-next').addEventListener('click', e => {
-  if(++S.month>11){S.month=0;S.year++;} renderCalendar();
+  navigateMonth('next');
   e.currentTarget.blur();
 });
 
