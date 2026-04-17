@@ -1026,7 +1026,7 @@ button:focus-visible { outline: none; background: transparent; }
   touch-action: none;
 }
 /* 期間枠 */
-.span-rect { fill: none; stroke-width: 7.5; stroke-linecap: round; stroke-linejoin: round; opacity: 0.45; }
+.span-rect { fill: none; stroke-width: 7.5; stroke-linecap: butt; stroke-linejoin: round; opacity: 0.45; }
 /* タブ */
 .span-tab {
   position: absolute;
@@ -1335,7 +1335,7 @@ button:focus-visible { outline: none; background: transparent; }
       <div class="cal-grid" id="cal-grid"></div>
     </div>
   </div>
-  <div style="position:fixed;bottom:0;right:8px;font-size:18px;color:#000;opacity:.5;pointer-events:none;z-index:9990;" id="_ver">v825</div>
+  <div style="position:fixed;bottom:0;right:8px;font-size:18px;color:#000;opacity:.5;pointer-events:none;z-index:9990;" id="_ver">v830</div>
 </div>
 <div id="day-screen" class="screen portrait">
 
@@ -5173,19 +5173,24 @@ function renderOneSpan(svg, tabLayer, ev, isPreview = false, skipTab = false, gr
     rowKeys.forEach(k => {
       const r = getCellRect(k);
       if (!r) return;
-      const cx1 = r.left  + PAD;
-      const cy1 = r.top   + PAD;
-      const cx2 = r.right  - PAD;
-      const cy2 = r.bottom - PAD;
+      const cx1 = r.left  + PAD;  // 垂直線のX（水平線の端点）
+      const cy1 = r.top   + PAD;  // 水平線のY（垂直線の端点）
+      const cx2 = r.right  - PAD; // 垂直線のX（水平線の端点）
+      const cy2 = r.bottom - PAD; // 水平線のY（垂直線の端点）
+      // 境界座標（linecap:buttで角をぴったり合わせるため）
+      const bx1 = r.left;
+      const by1 = r.top;
+      const bx2 = r.right;
+      const by2 = r.bottom;
 
-      // 上辺
-      if (isEdge(k, 'up'))    segs.push({ x1: cx1, y1: cy1, x2: cx2, y2: cy1, side: 'top' });
+      // 上辺：Y=cy1、X範囲はbx1〜bx2（垂直線のX境界まで届く）
+      if (isEdge(k, 'up'))    segs.push({ x1: bx1, y1: cy1, x2: bx2, y2: cy1, side: 'top' });
       // 下辺
-      if (isEdge(k, 'down'))  segs.push({ x1: cx1, y1: cy2, x2: cx2, y2: cy2, side: 'bottom' });
-      // 左辺
-      if (isEdge(k, 'left'))  segs.push({ x1: cx1, y1: cy1, x2: cx1, y2: cy2, side: 'left' });
+      if (isEdge(k, 'down'))  segs.push({ x1: bx1, y1: cy2, x2: bx2, y2: cy2, side: 'bottom' });
+      // 左辺：X=cx1、Y範囲はby1〜by2（水平線のY境界まで届く）
+      if (isEdge(k, 'left'))  segs.push({ x1: cx1, y1: by1, x2: cx1, y2: by2, side: 'left' });
       // 右辺
-      if (isEdge(k, 'right')) segs.push({ x1: cx2, y1: cy1, x2: cx2, y2: cy2, side: 'right' });
+      if (isEdge(k, 'right')) segs.push({ x1: cx2, y1: by1, x2: cx2, y2: by2, side: 'right' });
     });
 
     if (segs.length === 0) return;
@@ -5210,15 +5215,10 @@ function renderOneSpan(svg, tabLayer, ev, isPreview = false, skipTab = false, gr
     };
     const mergedSegs = [...mergeSegs(hSegs, true), ...mergeSegs(vSegs, false)];
 
-    // 線分をwobblyLineでパス化
-    const seedBase = ev.id.split('').reduce((a, c) => a + c.charCodeAt(0), 0) + rowIdx * 997;
-    const rand = seededRand(seedBase);
-    const amp  = 4.0;
-
+    // 線分をそのままパス化（座標がセル境界でぴったり交差するのでlinecap:buttでOK）
     let d = '';
     mergedSegs.forEach(s => {
-      d += ` M${s.x1.toFixed(1)},${s.y1.toFixed(1)}`;
-      d += wobblyLine(s.x1, s.y1, s.x2, s.y2, rand, amp);
+      d += ` M${s.x1.toFixed(1)},${s.y1.toFixed(1)} L${s.x2.toFixed(1)},${s.y2.toFixed(1)}`;
     });
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
